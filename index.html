@@ -1,29 +1,22 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en" class="scroll-smooth dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-    <meta http-equiv="Content-Security-Policy" content=" default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline' https:; script-src 'self' 'unsafe-inline' https:; font-src 'self' data: https:; connect-src 'self' https://formspree.io; media-src 'self' https:; ">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; img-src 'self' data:; style-src 'self' 'unsafe-inline' https:; script-src 'self' 'unsafe-inline' https:; font-src 'self' data: https:; connect-src 'self' https://formspree.io; media-src 'self' https:;">
+
+    <title>Waliul Awal Taha - Creative Developer</title>
+    <meta name="description" content="Creative Developer building expressive digital experiences. React, Node.js, and Design.">
+    <meta name="author" content="Waliul Awal Taha">
     
-    <title>Ahmed Seyam - Senior Software Developer</title>
-    <meta name="description" content="Senior Software Developer building scalable, high-performance digital experiences.">
-    <meta name="author" content="Ahmed Seyam">
-    <meta name="theme-color" content="#0a0a0a">
-    <meta name="keywords" content="software engineer, react developer, nodejs, full stack developer, portfolio">
-    
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="Ahmed Seyam - Senior Software Developer">
-    <meta property="og:description" content="Senior Software Developer building scalable, high-performance digital experiences.">
-    
-    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
-    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     fontFamily: {
@@ -33,739 +26,262 @@
                     colors: {
                         neutral: { 850: '#1f1f1f', 900: '#171717', 950: '#0a0a0a' }
                     },
-                    transitionTimingFunction: {
-                        'expo': 'cubic-bezier(0.16, 1, 0.3, 1)',
-                        'spring': 'cubic-bezier(0.175, 0.885, 0.32, 1.275)'
-                    },
                     animation: {
                         'float': 'float 8s ease-in-out infinite',
                         'marquee': 'marquee 35s linear infinite',
                         'blob': 'blob 10s infinite',
-                        'slide-up': 'slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
-                        'fade-in-view': 'fadeInView 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards',
                     },
                     keyframes: {
                         float: { '0%, 100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-20px)' } },
                         marquee: { '0%': { transform: 'translateX(0)' }, '100%': { transform: 'translateX(-50%)' } },
-                        blob: { "0%": { transform: "translate(0px, 0px) scale(1)" }, "33%": { transform: "translate(30px, -50px) scale(1.05)" }, "66%": { transform: "translate(-20px, 20px) scale(0.95)" }, "100%": { transform: "translate(0px, 0px) scale(1)" } },
-                        slideUp: { '0%': { transform: 'translateY(20px)', opacity: '0' }, '100%': { transform: 'translateY(0)', opacity: '1' } },
-                        fadeInView: { '0%': { opacity: '0', transform: 'translateY(10px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } }
+                        blob: {
+                            "0%": { transform: "translate(0px, 0px) scale(1)" },
+                            "33%": { transform: "translate(30px, -50px) scale(1.05)" },
+                            "66%": { transform: "translate(-20px, 20px) scale(0.95)" },
+                            "100%": { transform: "translate(0px, 0px) scale(1)" }
+                        }
                     }
                 }
             }
         }
     </script>
+    
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
     <style>
-        body { background-color: #050505; color: #e5e5e5; -webkit-font-smoothing: antialiased; overflow-x: hidden; cursor: none; touch-action: manipulation; }
-        ::selection { background: #ffffff; color: #000000; }
-        @media (hover: none) and (pointer: coarse) { body { cursor: auto !important; } .custom-cursor { display: none !important; } a, button, [role="button"], input, textarea { cursor: pointer !important; } }
-        .will-change-transform { will-change: transform; } .no-scrollbar::-webkit-scrollbar { display: none; } .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        .bg-mesh { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: -10; background: radial-gradient(circle at 15% 50%, rgba(76, 29, 149, 0.06), transparent 25%), radial-gradient(circle at 85% 30%, rgba(30, 64, 175, 0.06), transparent 25%); filter: contrast(120%); }
+        :root {
+            --bg-color: #f8f8f8;
+            --text-primary: #171717;
+            --card-bg: rgba(255, 255, 255, 0.8);
+            --border-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .dark {
+            --bg-color: #050505;
+            --text-primary: #e5e5e5;
+            --card-bg: rgba(10, 10, 10, 0.8);
+            --border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+            cursor: none;
+            transition: background-color 0.5s ease;
+        }
+        
+        ::selection { background: #6366f1; color: #ffffff; }
+
+        .bg-mesh {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            pointer-events: none;
+            z-index: -10;
+            background: 
+                radial-gradient(circle at 15% 50%, rgba(76, 29, 149, 0.08), transparent 25%), 
+                radial-gradient(circle at 85% 30%, rgba(30, 64, 175, 0.08), transparent 25%);
+        }
+
+        /* Custom overrides to support light mode transparency */
+        .dark-card { background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(12px); }
+        .text-adaptive { color: var(--text-primary); }
     </style>
 </head>
 <body>
     <div id="root"></div>
 
-<script type="text/babel">
-const { useState, useEffect, useRef, useCallback, memo } = React;
+    <script type="text/babel">
+        const { useState, useEffect, useRef, useCallback, memo } = React;
 
-// --- Icons --- 
-const Icon = ({ path, size = 24, className = "", fill="none" }) => ( <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill={fill} stroke={fill === "none" ? "currentColor" : "none"} strokeWidth={fill === "none" ? "2" : "0"} strokeLinecap="round" strokeLinejoin="round" className={className}>{path}</svg> );
+        // --- Icons ---
+        const Icon = ({ path, size = 24, className = "", fill="none" }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill={fill} stroke={fill === "none" ? "currentColor" : "none"} strokeWidth={fill === "none" ? "2" : "0"} strokeLinecap="round" strokeLinejoin="round" className={className}>{path}</svg>
+        );
 
-const Icons = { 
-    ArrowUpRight: (props) => <Icon {...props} path={<g><line x1="7" y1="17" x2="17" y2="7" /><polyline points="7 7 17 7 17 17" /></g>} />, 
-    Layers: (props) => <Icon {...props} path={<g><polygon points="12 2 2 7 12 12 22 7 12 2" /><polyline points="2 17 12 22 22 17" /><polyline points="2 12 12 17 22 12" /></g>} />, 
-    Code2: (props) => <Icon {...props} path={<g><polyline points="16 18 22 12 16 6" /><polyline points="8 6 2 12 8 18" /></g>} />, 
-    Github: (props) => <Icon {...props} path={<path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />} />, 
-    ArrowUp: (props) => <Icon {...props} path={<polyline points="18 15 12 9 6 15" />} />, 
-    Check: (props) => <Icon {...props} path={<polyline points="20 6 9 17 4 12" />} />, 
-    X: (props) => <Icon {...props} path={<g><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></g>} />, 
-    Layout: (props) => <Icon {...props} path={<rect x="3" y="3" width="18" height="18" rx="2" ry="2" />} />, 
-    Zap: (props) => <Icon {...props} path={<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />} />, 
-    Send: (props) => <Icon {...props} path={<g><line x1="22" y1="2" x2="11" y2="13" /><polygon points="22 2 15 22 11 13 2 9 22 2" /></g>} />, 
-    RefreshCcw: (props) => <Icon {...props} path={<g><path d="M23 4v6h-6" /><path d="M1 20v-6h6" /><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" /></g>} />, 
-    ChevronRight: (props) => <Icon {...props} path={<polyline points="9 18 15 12 9 6" />} />, 
-    Linkedin: (props) => <Icon {...props} path={<g><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" /><rect x="2" y="9" width="4" height="12" /><circle cx="4" cy="4" r="2" /></g>} />, 
-    Globe: (props) => <Icon {...props} path={<g><circle cx="12" cy="12" r="10" /><line x1="2" y1="12" x2="22" y2="12" /><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" /></g>} /> 
-};
-
-// --- Data --- 
-const personalInfo = { 
-    name: "Ahmed Seyam", 
-    role: "Senior Software Developer", 
-    socials: { 
-        github: "https://github.com/", 
-        linkedin: "https://www.linkedin.com/", 
-        email: "mailto:contact@example.com"
-    } 
-};
-
-const servicesData = [ 
-    { title: "Frontend Architecture", description: "Building fast, responsive, and scalable websites using modern technologies like React, Next.js, and Tailwind CSS.", iconKey: "code" }, 
-    { title: "Backend Systems", description: "Developing robust APIs and microservices using Node.js, Express, and modern database solutions.", iconKey: "layers" }, 
-    { title: "System Design", description: "Architecting cloud-native applications focused on high availability and low latency.", iconKey: "layout" }, 
-    { title: "Performance Tuning", description: "Enhancing application performance to ensure lightning-fast load times and optimized rendering.", iconKey: "zap" } 
-];
-
-const allPlaygroundItems = [ 
-    { title: "Nexus Storefront", type: "E-Commerce", category: "Full-Stack", color: "bg-purple-500" }, 
-    { title: "Aura Task Manager", type: "SaaS", category: "Productivity", color: "bg-blue-500" }, 
-    { title: "Velocity Chat", type: "Real-Time", category: "WebSockets", color: "bg-emerald-500" }, 
-    { title: "Neural Dashboard", type: "Data Vis", category: "Analytics", color: "bg-orange-500" } 
-];
-
-// --- Visual Components ---
-const CustomCursor = memo(() => { 
-    const cursorRef = useRef(null); 
-    const cursorDotRef = useRef(null); 
-    
-    useEffect(() => { 
-        if (typeof window === 'undefined' || window.matchMedia("(pointer: coarse)").matches) return; 
-        let rafId; 
-        const moveCursor = (e) => { 
-            cancelAnimationFrame(rafId); 
-            rafId = requestAnimationFrame(() => { 
-                if (cursorRef.current) cursorRef.current.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`; 
-                if (cursorDotRef.current) cursorDotRef.current.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`; 
-            }); 
-        }; 
-        window.addEventListener('mousemove', moveCursor, { passive: true }); 
-        return () => { window.removeEventListener('mousemove', moveCursor); cancelAnimationFrame(rafId); }; 
-    }, []); 
-    
-    return ( 
-        <React.Fragment> 
-            <div ref={cursorRef} className="custom-cursor fixed top-0 left-0 w-8 h-8 border border-white/30 rounded-full pointer-events-none z-[100] -ml-4 -mt-4 transition-transform duration-300 ease-expo mix-blend-difference will-change-transform hidden md:block"></div> 
-            <div ref={cursorDotRef} className="custom-cursor fixed top-0 left-0 w-1.5 h-1.5 bg-white rounded-full pointer-events-none z-[100] -ml-[3px] -mt-[3px] mix-blend-difference will-change-transform hidden md:block transition-transform duration-75 ease-out"></div> 
-        </React.Fragment> 
-    ); 
-});
-
-const Magnetic = ({ children }) => { 
-    const ref = useRef(null); 
-    const [position, setPosition] = useState({x:0, y:0}); 
-    const handleMouse = (e) => { 
-        if (!ref.current) return; 
-        const { clientX, clientY } = e; 
-        const { height, width, left, top } = ref.current.getBoundingClientRect(); 
-        const x = clientX - (left + width/2); 
-        const y = clientY - (top + height/2); 
-        setPosition({ x: x * 0.2, y: y * 0.2 }); 
-    } 
-    const reset = () => setPosition({x:0, y:0}); 
-    
-    return ( 
-        <div ref={ref} onMouseMove={handleMouse} onMouseLeave={reset} style={{transform: `translate3d(${position.x}px, ${position.y}px, 0)`, transition: 'transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)', display: 'inline-block'}} className="will-change-transform"> 
-            {children} 
-        </div> 
-    ) 
-};
-
-const Toast = ({ message, type, onClose }) => { 
-    useEffect(() => { 
-        const timer = setTimeout(onClose, 4000); 
-        return () => clearTimeout(timer); 
-    }, [onClose]); 
-    
-    return ( 
-        <div className={`animate-in slide-in-from-bottom-5 fade-in duration-500 ease-expo min-w-[300px] p-4 rounded-xl border shadow-2xl flex items-center gap-3 ${type === 'success' ? 'bg-neutral-900 border-green-900/50' : 'bg-neutral-900 border-neutral-800'}`}> 
-            <div className={`p-1.5 rounded-full ${type === 'success' ? 'bg-green-500/10' : 'bg-white/10'}`}> 
-                {type === 'success' ? <Icons.Check size={16} className="text-green-500" /> : <Icons.Zap size={16} className="text-white" />} 
-            </div> 
-            <p className={`text-sm font-medium ${type === 'success' ? 'text-green-400' : 'text-white'}`}>{message}</p> 
-        </div> 
-    ); 
-};
-
-const Spotlight = memo(() => { 
-    const ref = useRef(null); 
-    useEffect(() => { 
-        let rafId; 
-        const handleMouseMove = (e) => { 
-            cancelAnimationFrame(rafId); 
-            rafId = requestAnimationFrame(() => { 
-                if (ref.current) { ref.current.style.background = `radial-gradient(800px at ${e.clientX}px ${e.clientY}px, rgba(29, 78, 216, 0.04), transparent 80%)`; } 
-            }); 
-        }; 
-        window.addEventListener('mousemove', handleMouseMove, { passive: true }); 
-        return () => { window.removeEventListener('mousemove', handleMouseMove); cancelAnimationFrame(rafId); }; 
-    }, []); 
-    return <div ref={ref} className="fixed inset-0 z-0 pointer-events-none transition-opacity duration-300 will-change-transform" />; 
-});
-
-const BackgroundBlobs = memo(() => ( 
-    <div className="fixed inset-0 overflow-hidden pointer-events-none z-[-1]"> 
-        <div className="absolute top-0 -left-4 w-96 h-96 bg-purple-900/10 rounded-full mix-blend-screen filter blur-3xl opacity-40 animate-blob will-change-transform"></div> 
-        <div className="absolute top-0 -right-4 w-96 h-96 bg-blue-900/10 rounded-full mix-blend-screen filter blur-3xl opacity-40 animate-blob animation-delay-2000 will-change-transform"></div> 
-        <div className="absolute -bottom-8 left-20 w-96 h-96 bg-indigo-900/10 rounded-full mix-blend-screen filter blur-3xl opacity-40 animate-blob animation-delay-4000 will-change-transform"></div> 
-    </div> 
-));
-
-const Reveal = ({ children, delay = 0, className = "" }) => { 
-    const [isVisible, setIsVisible] = useState(false); 
-    const ref = useRef(null); 
-    useEffect(() => { 
-        const observer = new IntersectionObserver(([entry]) => { 
-            if (entry.isIntersecting) { setIsVisible(true); observer.unobserve(ref.current); } 
-        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }); 
-        if (ref.current) observer.observe(ref.current); 
-        return () => observer.disconnect(); 
-    }, []); 
-    return ( 
-        <div ref={ref} className={`${className} transform transition-all duration-1000 ease-expo will-change-transform ${isVisible ? 'translate-y-0 opacity-100 scale-100 blur-0' : 'translate-y-8 opacity-0 scale-[0.98] blur-[2px]'}`} style={{ transitionDelay: `${delay}ms` }}> 
-            {children} 
-        </div> 
-    ); 
-};
-
-const Breadcrumbs = ({ items }) => ( 
-    <nav className="flex items-center flex-wrap gap-2 text-sm font-mono text-neutral-400 mb-8 animate-in fade-in slide-in-from-left-4 duration-700 ease-expo"> 
-        {items.map((item, index) => ( 
-            <React.Fragment key={index}> 
-                {index > 0 && <Icons.ChevronRight size={14} className="text-neutral-600" />} 
-                {item.onClick ? ( <button onClick={item.onClick} className="hover:text-white transition-colors cursor-pointer hover:underline underline-offset-4 decoration-neutral-600"> {item.label} </button> ) : ( <span className="text-neutral-200 cursor-default">{item.label}</span> )} 
-            </React.Fragment> 
-        ))} 
-    </nav> 
-);
-
-const Footer = memo(() => ( 
-    <footer className="py-8 text-center text-neutral-500 text-sm border-t border-neutral-900/50 mt-auto"> 
-        <p>&copy; {new Date().getFullYear()} {personalInfo.name}. All rights reserved.</p> 
-    </footer> 
-));
-
-const CircularScrollButton = ({ currentView }) => { 
-    const [show, setShow] = useState(false); 
-    useEffect(() => { 
-        const handleScroll = () => { setShow(window.scrollY > 400 && currentView !== 'detail'); }; 
-        window.addEventListener('scroll', handleScroll, { passive: true }); 
-        return () => window.removeEventListener('scroll', handleScroll); 
-    }, [currentView]);
-
-    if (!show) return null; 
-    return ( 
-        <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} aria-label="Back to Top" className="fixed bottom-8 right-8 z-50 p-3.5 rounded-full bg-neutral-900/90 backdrop-blur-md border border-white/10 text-white hover:bg-neutral-800 transition-all duration-300 animate-in fade-in slide-in-from-bottom-6 shadow-2xl group hover:border-white/30"> 
-            <div className="group-hover:-translate-y-1 transition-transform duration-300 ease-expo"><Icons.ArrowUp size={20} /></div> 
-        </button> 
-    ); 
-};
-
-const LocationTime = () => { 
-    const [time, setTime] = useState(""); 
-    useEffect(() => { 
-        const updateTime = () => { 
-            const now = new Date(); 
-            const options = { timeZone: 'Asia/Dhaka', hour: '2-digit', minute: '2-digit', hour12: true }; 
-            setTime(now.toLocaleTimeString('en-US', options)); 
-        }; 
-        updateTime(); 
-        const interval = setInterval(updateTime, 1000); 
-        return () => clearInterval(interval); 
-    }, []);
-
-    return ( 
-        <div className="flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-md text-xs font-mono text-neutral-400 select-none hover:bg-white/10 transition-colors duration-300 cursor-default"> 
-            <div className="animate-spin-slow" style={{ animationDuration: '10s' }}> 
-                <Icons.Globe size={14} className="text-neutral-500" /> 
-            </div> 
-            <span>Global <span className="text-white font-medium ml-1">{time}</span></span> 
-        </div> 
-    ); 
-};
-
-// --- Navigation --- 
-const Navigation = memo(({ currentView, isMenuOpen, setIsMenuOpen, onNavigate }) => { 
-    const [activeSection, setActiveSection] = useState(""); 
-    const [scrolled, setScrolled] = useState(false);
-
-    useEffect(() => { 
-        let throttleTimer; 
-        const handleScroll = () => { 
-            if (throttleTimer) return; 
-            throttleTimer = setTimeout(() => { 
-                setScrolled(window.scrollY > 20); 
-                if (currentView === 'home') { 
-                    const sections = ['work', 'services', 'playground', 'contact']; 
-                    let current = ""; 
-                    for (const section of sections) { 
-                        const element = document.getElementById(section); 
-                        if (element && window.scrollY >= (element.offsetTop - 300)) { current = section; } 
-                    } 
-                    setActiveSection(current ? `#${current}` : ""); 
-                } 
-                throttleTimer = null; 
-            }, 50); 
-        }; 
-        window.addEventListener('scroll', handleScroll, { passive: true }); 
-        return () => window.removeEventListener('scroll', handleScroll); 
-    }, [currentView]);
-
-    const menuItems = [ 
-        { label: 'About', href: '#work' }, 
-        { label: 'Services', href: '#services' }, 
-        { label: 'Projects', href: 'playground', isPage: true }, 
-        { label: 'Contact', href: '#contact' } 
-    ];
-
-    return ( 
-        <React.Fragment> 
-            <nav className={`fixed w-full z-50 top-0 left-0 transition-all duration-500 ease-expo ${scrolled ? 'py-4 bg-neutral-950/80 backdrop-blur-xl border-b border-white/5 shadow-2xl shadow-black/50' : 'py-6 bg-transparent'}`}> 
-                <div className="px-6 md:px-12 max-w-7xl mx-auto flex justify-between items-center"> 
-                    <a href="#" onClick={(e) => onNavigate(e, '#')} className="flex items-center gap-4 group z-50 relative" aria-label="Home"> 
-                        <div className="relative w-10 h-10 bg-white rounded-lg flex items-center justify-center p-1.5 shadow-lg group-hover:scale-105 transition-transform duration-500 ease-expo"> 
-                            <span className="font-bold text-black font-mono">AS</span>
-                        </div> 
-                        <span className={`font-mono text-sm tracking-widest uppercase transition-all duration-500 ease-expo hidden sm:block ${scrolled ? 'opacity-0 -translate-x-4 w-0 overflow-hidden' : 'opacity-100 translate-x-0 text-neutral-400'}`}>Ahmed Seyam</span> 
-                    </a> 
-                    <div className="hidden md:flex items-center gap-1 bg-neutral-900/80 p-1.5 rounded-full border border-white/10 backdrop-blur-md shadow-2xl"> 
-                        {menuItems.map((item) => { 
-                            const isActive = currentView === 'playground' ? item.isPage : activeSection === item.href; 
-                            return ( 
-                                <Magnetic key={item.label}> 
-                                    <a href={item.href} onClick={(e) => onNavigate(e, item.href)} className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 relative inline-block ${isActive ? 'bg-white text-black shadow-lg scale-105' : 'text-neutral-400 hover:text-white hover:bg-white/5'}`}>{item.label}</a> 
-                                </Magnetic> 
-                            ); 
-                        })} 
-                    </div>
-
-                    <div className="md:hidden z-50 relative"> 
-                        <button onClick={() => setIsMenuOpen(!isMenuOpen)} aria-label="Toggle Menu" className="text-white p-2 relative group focus:outline-none"> 
-                            <div className={`w-6 h-0.5 bg-white mb-1.5 transition-all duration-300 ease-expo ${isMenuOpen ? 'rotate-45 translate-y-2' : ''}`}></div> 
-                            <div className={`w-6 h-0.5 bg-white mb-1.5 transition-all duration-300 ease-expo ${isMenuOpen ? 'opacity-0 translate-x-4' : ''}`}></div> 
-                            <div className={`w-6 h-0.5 bg-white transition-all duration-300 ease-expo ${isMenuOpen ? '-rotate-45 -translate-y-2' : ''}`}></div> 
-                        </button> 
-                    </div> 
-                </div> 
-            </nav>
-
-            {isMenuOpen && ( 
-                <div className="fixed inset-0 z-40 bg-neutral-950/98 backdrop-blur-3xl flex flex-col animate-in fade-in duration-500"> 
-                    <div className="flex-1 flex flex-col justify-center items-center gap-8 p-6"> 
-                        {menuItems.map((item, idx) => ( 
-                            <a key={item.label} href={item.href} onClick={(e) => onNavigate(e, item.href)} className="text-5xl font-bold tracking-tighter text-neutral-300 hover:text-white transition-all hover:scale-105 duration-300 animate-slide-up opacity-0" style={{ animationDelay: `${idx * 100}ms` }}>{item.label}</a> 
-                        ))} 
-                    </div> 
-                </div> 
-            )} 
-        </React.Fragment> 
-    ); 
-});
-
-const Preloader = ({ isLoading, onAnimationDone }) => { 
-    const [progress, setProgress] = useState(0); 
-    const [isExiting, setIsExiting] = useState(false); 
-    const [message, setMessage] = useState("Initializing...");
-
-    useEffect(() => { 
-        let currentProgress = 0; 
-        const interval = setInterval(() => { 
-            const increment = Math.random() * 3 + 1; 
-            currentProgress += increment; 
-            if (currentProgress > 100) currentProgress = 100; 
-            setProgress(Math.floor(currentProgress));
-
-            if (currentProgress < 30) setMessage("Loading Assets..."); 
-            else if (currentProgress < 55) setMessage("Compiling Code..."); 
-            else if (currentProgress < 80) setMessage("Optimizing Experience..."); 
-            else if (currentProgress < 100) setMessage("Almost Ready..."); 
-            else setMessage("Welcome.");
-
-            if (currentProgress >= 100) { 
-                clearInterval(interval); 
-                setTimeout(() => { setIsExiting(true); setTimeout(onAnimationDone, 900); }, 400); 
-            } 
-        }, 30); 
-        return () => clearInterval(interval); 
-    }, [onAnimationDone]);
-
-    if (!isLoading && !isExiting) return null; 
-    return ( 
-        <div className={`fixed inset-0 z-[200] bg-neutral-950 flex flex-col items-center justify-center transition-transform duration-1000 ease-expo ${isExiting ? '-translate-y-full' : 'translate-y-0'}`}> 
-            <div className="relative text-center w-full max-w-md px-6"> 
-                <div className="text-7xl md:text-9xl font-bold text-white mb-2 font-mono tracking-tighter flex justify-center items-baseline"> 
-                    {progress}<span className="text-3xl md:text-5xl text-neutral-500">%</span> 
-                </div> 
-                <div className="h-8 flex items-center justify-center mb-8"> 
-                    <p className="text-neutral-400 font-mono text-sm uppercase tracking-[0.2em] animate-pulse">{message}</p> 
-                </div>
-                <div className="w-full h-[1px] bg-neutral-900 overflow-hidden relative"> 
-                    <div className="absolute top-0 left-0 h-full bg-white transition-all duration-150 ease-out" style={{ width: `${progress}%` }}></div> 
-                </div> 
-            </div> 
-        </div> 
-    ); 
-};
-
-const HomePage = ({ onProjectClick, addToast }) => ( 
-    <div className="animate-fade-in-view"> 
-        <section className="min-h-screen flex items-center px-6 md:px-12 max-w-7xl mx-auto pt-20"> 
-            <div> 
-                <Reveal> 
-                    <div className="flex flex-col md:flex-row md:items-center gap-4 mb-6"> 
-                        <div className="flex items-center gap-2"> 
-                            <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span> 
-                            <span className="text-neutral-400 text-sm font-mono uppercase tracking-widest">Open for roles</span> 
-                        </div> 
-                        <div className="hidden md:block w-px h-4 bg-neutral-800"></div> 
-                        <LocationTime /> 
-                    </div> 
-                </Reveal> 
-                <Reveal delay={150}> 
-                    <h1 className="text-6xl md:text-8xl lg:text-[10rem] font-bold tracking-tighter leading-[0.9] mb-8">SOFTWARE<br /><span className="text-neutral-700">ENGINEER.</span></h1> 
-                </Reveal> 
-                <Reveal delay={300}> 
-                    <p className="max-w-xl text-lg md:text-xl text-neutral-400 leading-relaxed mb-10 font-light">Hi, I'm <span className="text-white font-medium">{personalInfo.name}</span>. I engineer high-performance digital products with a focus on clean architecture, modern aesthetics, and scalability.</p> 
-                </Reveal> 
-                <Reveal delay={450}> 
-                    <div className="flex gap-4"> 
-                        <Magnetic><a href="#work" className="bg-white text-black px-8 py-4 rounded-full font-bold hover:bg-neutral-200 transition-colors flex items-center gap-2 inline-block shadow-xl hover:scale-105 duration-300">View Work <Icons.ArrowUpRight size={18} /></a></Magnetic> 
-                    </div> 
-                </Reveal> 
-            </div> 
-        </section>
-
-        <div className="h-px bg-gradient-to-r from-transparent via-neutral-800 to-transparent"></div>
-
-        <section id="work" className="py-32 px-6 md:px-12 max-w-7xl mx-auto relative"> 
-            <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-indigo-500/5 rounded-full blur-[120px] pointer-events-none"></div>
-            <Reveal className="mb-16"> 
-                <div className="flex items-end justify-between"> 
-                    <h2 className="text-4xl md:text-5xl font-bold tracking-tight">About</h2> 
-                    <div className="hidden md:block h-px flex-1 bg-gradient-to-r from-neutral-800 to-transparent ml-8 mb-2"></div> 
-                </div> 
-            </Reveal>
-
-            <Reveal delay={150}> 
-                <div className="relative group"> 
-                    <div className="absolute -inset-0.5 bg-gradient-to-r from-indigo-500/30 via-purple-500/30 to-blue-500/30 rounded-3xl opacity-0 group-hover:opacity-100 blur-lg transition duration-700 ease-expo"></div> 
-                    <div className="relative bg-neutral-950/80 backdrop-blur-xl p-8 md:p-12 rounded-3xl border border-white/10 shadow-2xl transition-transform duration-700 ease-expo group-hover:-translate-y-1"> 
-                        <div className="absolute top-8 right-8 text-neutral-800/50 pointer-events-none transition-transform duration-700 group-hover:scale-110 group-hover:rotate-6"> 
-                            <Icons.Code2 size={120} strokeWidth={1} /> 
-                        </div>
-                        <div className="relative z-10 flex gap-8"> 
-                            <div className="hidden md:block w-1 bg-gradient-to-b from-indigo-500 via-purple-500 to-transparent rounded-full h-full min-h-[120px]"></div> 
-                            <div> 
-                                <p className="text-lg md:text-2xl text-neutral-400 leading-relaxed font-light"> 
-                                    <span className="text-white font-medium">I specialize in building</span> complex web applications across various domains, including <span className="text-indigo-400">e-commerce platforms</span>, <span className="text-indigo-400">real-time chat engines</span>, and robust SaaS tools. My focus is always on creating <span className="text-white">seamless user interfaces</span> matched with bulletproof backend logic. 
-                                </p> 
-                            </div> 
-                        </div> 
-                    </div> 
-                </div> 
-            </Reveal> 
-        </section>
-
-        <section id="services" className="py-32 bg-neutral-900/20 px-6 md:px-12 border-y border-white/5"> 
-            <div className="max-w-7xl mx-auto"> 
-                <Reveal className="mb-20"><h2 className="text-4xl md:text-5xl font-bold tracking-tight">Expertise</h2></Reveal> 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"> 
-                    {servicesData.map((s, i) => ( 
-                        <Reveal key={i} delay={i * 100} className="h-full"> 
-                            <div className="h-full bg-neutral-950 border border-white/5 p-8 rounded-2xl hover:border-white/20 transition-all duration-500 ease-expo group hover:-translate-y-2 hover:shadow-2xl hover:shadow-white/5"> 
-                                <div className="w-14 h-14 bg-neutral-900 rounded-xl flex items-center justify-center mb-6 text-white group-hover:scale-110 group-hover:bg-white group-hover:text-black transition-all duration-500 ease-expo border border-white/10"> 
-                                    {s.iconKey === 'code' && <Icons.Code2 />} 
-                                    {s.iconKey === 'layers' && <Icons.Layers />} 
-                                    {s.iconKey === 'layout' && <Icons.Layout />} 
-                                    {s.iconKey === 'zap' && <Icons.Zap />} 
-                                </div> 
-                                <h3 className="text-xl font-bold mb-3">{s.title}</h3> 
-                                <p className="text-neutral-400 text-sm leading-relaxed">{s.description}</p> 
-                            </div> 
-                        </Reveal> 
-                    ))} 
-                </div> 
-            </div> 
-        </section>
-
-        <section id="playground" className="py-32 px-6 md:px-12 max-w-7xl mx-auto"> 
-            <div className="flex justify-between items-end mb-16"> 
-                <Reveal><h2 className="text-4xl md:text-5xl font-bold tracking-tight">Projects</h2></Reveal> 
-                <Reveal delay={150}> 
-                    <a href="#playground" onClick={(e) => { e.preventDefault(); onProjectClick(null, 'page'); }} className="text-neutral-400 hover:text-white border-b border-transparent hover:border-white transition-all duration-300 pb-1 flex items-center gap-2 group">View All <span className="group-hover:translate-x-1 transition-transform"><Icons.ChevronRight size={16}/></span></a> 
-                </Reveal> 
-            </div> 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6"> 
-                {allPlaygroundItems.slice(0, 4).map((item, i) => ( 
-                    <Reveal key={i} delay={i * 100}> 
-                        <div onClick={() => onProjectClick(item, 'playground')} className="group relative aspect-square bg-neutral-950 border border-white/5 rounded-2xl overflow-hidden hover:border-white/20 transition-all duration-500 ease-expo cursor-pointer hover:-translate-y-1 hover:shadow-xl"> 
-                            <div className={`absolute inset-0 ${item.color} opacity-5 group-hover:opacity-15 transition-opacity duration-500`}></div> 
-                            <div className="absolute inset-0 flex flex-col justify-between p-6"> 
-                                <div className="flex justify-end opacity-0 group-hover:opacity-100 transition-all transform translate-y-4 group-hover:translate-y-0 duration-500 ease-expo"> 
-                                    <div className="bg-white text-black p-2.5 rounded-full shadow-lg"><Icons.ArrowUpRight size={18}/></div> 
-                                </div> 
-                                <div> 
-                                    <h4 className="font-bold text-lg group-hover:text-white text-neutral-200 transition-colors">{item.title}</h4> 
-                                    <p className="text-xs text-neutral-500 uppercase tracking-wider mt-1 font-mono">{item.type}</p> 
-                                </div> 
-                            </div> 
-                        </div> 
-                    </Reveal> 
-                ))} 
-            </div> 
-        </section>
-
-        <div className="py-24 border-y border-white/5 bg-neutral-950 overflow-hidden relative"> 
-            <div className="absolute inset-0 bg-gradient-to-r from-neutral-950 via-transparent to-neutral-950 z-10 w-full pointer-events-none"></div> 
-            <div className="flex animate-marquee whitespace-nowrap"> 
-                {[...Array(2)].map((_, i) => ( 
-                    <div key={i} className="flex gap-20 mx-10"> 
-                        {['React', 'Next.js', 'TypeScript', 'Node.js', 'Redis', 'Docker', 'AWS', 'MongoDB'].map((tech) => ( 
-                            <span key={tech} className="text-6xl md:text-8xl font-bold text-neutral-900 uppercase hover:text-white transition-colors duration-500 cursor-default">{tech}</span> 
-                        ))} 
-                    </div> 
-                ))} 
-            </div> 
-        </div>
-
-        <section id="contact" className="py-32 px-6 md:px-12 max-w-7xl mx-auto"> 
-            <div className="grid lg:grid-cols-2 gap-16 items-center"> 
-                <div> 
-                    <Reveal><h2 className="text-5xl md:text-7xl font-bold tracking-tighter mb-8 leading-[1.1]">Let's build<br/><span className="text-neutral-600">something great.</span></h2></Reveal> 
-                    <Reveal delay={150}><p className="text-xl text-neutral-400 mb-12 max-w-md font-light">Currently open to senior developer opportunities and high-impact projects.</p></Reveal> 
-                </div> 
-                <Reveal delay={400} className="w-full"> 
-                    <ContactForm addToast={addToast} /> 
-                </Reveal> 
-            </div> 
-        </section> 
-        <Footer /> 
-    </div> 
-);
-
-const ProjectDetailPage = ({ project, onBack, onHome }) => { 
-    useEffect(() => { window.scrollTo(0, 0); }, []); 
-    const breadcrumbItems = [ 
-        { label: 'Home', onClick: onHome }, 
-        { label: 'Projects', onClick: onBack }, 
-        { label: project.title } 
-    ];
-
-    return ( 
-        <div className="min-h-screen pt-32 px-6 md:px-12 max-w-7xl mx-auto flex flex-col animate-fade-in-view"> 
-            <Breadcrumbs items={breadcrumbItems} /> 
-            <div className="mb-12"> 
-                <h1 className="text-5xl md:text-7xl font-bold tracking-tighter mb-4">{project.title}</h1> 
-                <p className="text-xl md:text-2xl text-neutral-400 font-light">{project.subtitle}</p> 
-            </div> 
-            <div className={`w-full h-[40vh] md:h-[500px] ${project.color || 'bg-neutral-900'} rounded-3xl mb-16 relative overflow-hidden group border border-white/10 shadow-2xl`}> 
-                <div className="absolute inset-0 flex items-center justify-center opacity-20 group-hover:scale-110 transition-transform duration-1000 ease-expo"><Icons.Code2 size={120} /></div> 
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div> 
-            </div> 
-            <div className="grid md:grid-cols-3 gap-12 mb-20"> 
-                <div className="md:col-span-2"> 
-                    <h3 className="text-2xl font-bold mb-6">Overview</h3> 
-                    <p className="text-neutral-400 leading-relaxed text-lg mb-8 font-light">This project highlights an implementation of modern web architecture.</p> 
-                    <p className="text-neutral-400 leading-relaxed text-lg font-light">Full descriptions and live source links will be integrated here detailing the development lifecycle and challenges conquered.</p> 
-                </div> 
-                <div> 
-                    <div className="bg-neutral-950 border border-white/5 p-8 rounded-2xl shadow-xl"> 
-                        <h4 className="text-sm font-mono text-neutral-500 uppercase mb-6 tracking-widest">Technologies</h4> 
-                        <div className="flex flex-wrap gap-3"> 
-                            {["React", "Node.js", "TypeScript"].map((t, i) => ( 
-                                <span key={`${t}-${i}`} className="px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-neutral-300 cursor-default hover:bg-white/10 hover:border-white/20 transition-all duration-300">{t}</span> 
-                            ))} 
-                        </div> 
-                    </div> 
-                </div> 
-            </div> 
-            <Footer /> 
-        </div> 
-    ); 
-};
-
-const PlaygroundPage = ({ onBack, onItemClick }) => { 
-    const [filter, setFilter] = useState("All"); 
-    useEffect(() => { window.scrollTo(0, 0); }, []); 
-    const filteredItems = filter === "All" ? allPlaygroundItems : allPlaygroundItems.filter(item => item.category === filter); 
-    const breadcrumbItems = [{ label: 'Home', onClick: onBack }, { label: 'Projects' }];
-
-    return ( 
-        <div className="min-h-screen pt-32 px-6 md:px-12 max-w-7xl mx-auto flex flex-col animate-fade-in-view"> 
-            <Breadcrumbs items={breadcrumbItems} /> 
-            <div className="mb-12"> 
-                <h1 className="text-5xl md:text-7xl font-bold tracking-tighter mb-6">Projects</h1> 
-                <p className="text-xl text-neutral-400 max-w-2xl font-light">A collection of full-stack builds, systems architectures, and production applications.</p> 
-            </div> 
-            <div className="flex gap-3 mb-12 overflow-x-auto pb-4 no-scrollbar"> 
-                {["All", "Full-Stack", "Productivity", "WebSockets", "Analytics"].map(cat => ( 
-                    <button key={cat} onClick={() => setFilter(cat)} className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all whitespace-nowrap ${filter === cat ? "bg-white text-black shadow-lg" : "bg-neutral-950 text-neutral-400 border border-white/10 hover:border-white/30 hover:text-white"}`}>{cat}</button> 
-                ))} 
-            </div> 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 pb-20 mb-auto"> 
-                {filteredItems.map((item, index) => ( 
-                    <div key={index} onClick={() => onItemClick(item)} className="group cursor-pointer animate-slide-up" style={{ animationDelay: `${index * 50}ms`, opacity: 0 }}> 
-                        <div className="aspect-square relative bg-neutral-950 border border-white/5 hover:border-white/30 transition-all duration-500 ease-expo overflow-hidden rounded-2xl mb-5 hover:-translate-y-1 hover:shadow-2xl"> 
-                            <div className={`absolute inset-0 ${item.color} opacity-10 group-hover:opacity-20 transition-opacity duration-500`} /> 
-                            <div className="absolute inset-0 flex items-center justify-center"><div className="w-14 h-14 bg-white text-black rounded-full flex items-center justify-center scale-90 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-500 ease-expo shadow-xl"><Icons.ArrowUpRight size={22} /></div></div> 
-                        </div> 
-                        <h3 className="text-xl font-bold text-neutral-200 group-hover:text-white transition-colors">{item.title}</h3> 
-                        <span className="text-xs font-mono text-neutral-500 uppercase mt-1 block">{item.type}</span> 
-                    </div> 
-                ))} 
-            </div> 
-            <Footer /> 
-        </div> 
-    ); 
-};
-
-const ContactForm = ({ addToast }) => { 
-    const [state, setState] = useState({ name: '', email: '', message: '', captcha: '' }); 
-    const [loading, setLoading] = useState(false); 
-    const [challenge, setChallenge] = useState({ n1: 0, n2: 0 }); 
-    
-    // ACTION REQUIRED: Add your own Formspree endpoint below
-    const FORMSPREE_ENDPOINT = "https://formspree.io/f/YOUR_ENDPOINT_HERE"; 
-    
-    useEffect(() => { genCaptcha(); }, []); 
-    const genCaptcha = () => setChallenge({ n1: Math.floor(Math.random()*10), n2: Math.floor(Math.random()*10) });
-
-    const handleSubmit = async (e) => { 
-        e.preventDefault(); 
-        if (parseInt(state.captcha) !== (challenge.n1 + challenge.n2)) { 
-            addToast("Incorrect math answer.", "error"); return; 
-        } 
-        setLoading(true); 
-        try { 
-            const response = await fetch(FORMSPREE_ENDPOINT, { 
-                method: 'POST', 
-                headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }, 
-                body: JSON.stringify({ name: state.name, email: state.email, message: state.message }) 
-            }); 
-            if (response.ok) { 
-                setState({ name: '', email: '', message: '', captcha: '' }); 
-                genCaptcha(); 
-                addToast("Message sent successfully!", "success"); 
-            } else { 
-                addToast("Error: Did you replace the Formspree ID?", "error"); 
-            } 
-        } catch (error) { 
-            addToast("Network error. Please try again.", "error"); 
-        } finally { 
-            setLoading(false); 
-        } 
-    };
-
-    return ( 
-        <form onSubmit={handleSubmit} className="space-y-4 bg-neutral-950/50 p-8 rounded-3xl border border-white/5 shadow-2xl"> 
-            <div className="grid grid-cols-2 gap-4"> 
-                <input type="text" placeholder="Name" required className="w-full bg-neutral-900/50 border border-white/10 rounded-xl p-4 text-white placeholder:text-neutral-500 focus:border-white/50 focus:bg-neutral-900 focus:outline-none transition-all duration-300" value={state.name} onChange={e => setState({...state, name: e.target.value})} /> 
-                <input type="email" placeholder="Email" required className="w-full bg-neutral-900/50 border border-white/10 rounded-xl p-4 text-white placeholder:text-neutral-500 focus:border-white/50 focus:bg-neutral-900 focus:outline-none transition-all duration-300" value={state.email} onChange={e => setState({...state, email: e.target.value})} /> 
-            </div> 
-            <textarea placeholder="Tell me about your project..." rows="5" required className="w-full bg-neutral-900/50 border border-white/10 rounded-xl p-4 text-white placeholder:text-neutral-500 focus:border-white/50 focus:bg-neutral-900 focus:outline-none transition-all duration-300 resize-none" value={state.message} onChange={e => setState({...state, message: e.target.value})}></textarea> 
-            <div className="flex gap-4 items-center"> 
-                <div className="flex-1 bg-neutral-900/50 border border-white/10 rounded-xl px-4 py-4 text-neutral-400 font-mono text-sm flex items-center justify-between"> 
-                    <span>{challenge.n1} + {challenge.n2} = ?</span> 
-                    <button type="button" onClick={genCaptcha} className="hover:text-white hover:rotate-180 transition-all duration-300"><Icons.RefreshCcw size={16}/></button> 
-                </div> 
-                <input type="number" placeholder="Ans" required className="w-24 bg-neutral-900/50 border border-white/10 rounded-xl p-4 text-white text-center focus:border-white/50 focus:bg-neutral-900 focus:outline-none transition-all duration-300" value={state.captcha} onChange={e => setState({...state, captcha: e.target.value})} /> 
-                <button type="submit" disabled={loading} className="flex-1 bg-white text-black font-bold rounded-xl p-4 hover:bg-neutral-200 hover:scale-[1.02] transition-all duration-300 disabled:opacity-50 disabled:hover:scale-100 flex justify-center items-center gap-2 group"> 
-                    {loading ? 'Sending...' : <React.Fragment>Send Message <span className="group-hover:translate-x-1 transition-transform"><Icons.Send size={16}/></span></React.Fragment>} 
-                </button> 
-            </div> 
-        </form> 
-    ); 
-};
-
-const App = () => { 
-    const [isLoading, setIsLoading] = useState(true); 
-    const [isMenuOpen, setIsMenuOpen] = useState(false); 
-    const [currentView, setCurrentView] = useState('home'); 
-    const [selectedProject, setSelectedProject] = useState(null); 
-    const [toasts, setToasts] = useState([]); 
-    const scrollPos = useRef(0);
-
-    useEffect(() => { 
-        if (isMenuOpen) document.body.style.overflow = 'hidden'; 
-        else document.body.style.overflow = ''; 
-    }, [isMenuOpen]);
-
-    const addToast = useCallback((msg, type) => { 
-        const id = Date.now(); 
-        setToasts(prev => [...prev, { id, message: msg, type }]); 
-    }, []);
-
-    const handleNav = useCallback((e, href) => { 
-        e.preventDefault(); 
-        setIsMenuOpen(false);
-
-        if (href === 'playground') { 
-            scrollPos.current = window.scrollY; 
-            setCurrentView('playground'); 
-            return; 
-        }
-
-        const performScroll = () => { 
-            if (href === '#' || !href) { 
-                window.scrollTo({ top: 0, behavior: 'smooth' }); 
-            } else { 
-                const el = document.querySelector(href); 
-                if (el) el.scrollIntoView({ behavior: 'smooth' }); 
-            } 
+        const Icons = {
+            Sun: (props) => <Icon {...props} path={<g><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></g>} />,
+            Moon: (props) => <Icon {...props} path={<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />} />,
+            ArrowUpRight: (props) => <Icon {...props} path={<g><line x1="7" y1="17" x2="17" y2="7" /><polyline points="7 7 17 7 17 17" /></g>} />,
+            Code2: (props) => <Icon {...props} path={<g><polyline points="16 18 22 12 16 6" /><polyline points="8 6 2 12 8 18" /></g>} />,
+            Github: (props) => <Icon {...props} path={<path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />} />,
+            Globe: (props) => <Icon {...props} path={<g><circle cx="12" cy="12" r="10" /><line x1="2" y1="12" x2="22" y2="12" /><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" /></g>} />,
+            Send: (props) => <Icon {...props} path={<g><line x1="22" y1="2" x2="11" y2="13" /><polygon points="22 2 15 22 11 13 2 9 22 2" /></g>} />,
+            RefreshCcw: (props) => <Icon {...props} path={<g><path d="M23 4v6h-6" /><path d="M1 20v-6h6" /><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" /></g>} />,
+            ChevronRight: (props) => <Icon {...props} path={<polyline points="9 18 15 12 9 6" />} />
         };
 
-        if (currentView !== 'home') { 
-            setCurrentView('home'); 
-            setTimeout(performScroll, 50); 
-        } else { 
-            performScroll(); 
-        } 
-    }, [currentView]);
+        const personalInfo = {
+            name: "Waliul Awal Taha",
+            role: "Creative Developer",
+            socials: { github: "https://github.com/waliulawaltaha", linkedin: "https://www.linkedin.com/in/waliulawaltaha" }
+        };
 
-    const handleProjectClick = useCallback((item, type) => { 
-        scrollPos.current = window.scrollY; 
-        if (type === 'page') { setCurrentView('playground'); return; } 
-        const project = { ...item }; 
-        if (type === 'work') { 
-            project.title = item.role; 
-            project.subtitle = item.company; 
-            project.category = "Work Experience"; 
-            project.color = "bg-neutral-800"; 
-        } else { 
-            project.subtitle = item.type; 
-            project.category = "Projects"; 
-        } 
-        setSelectedProject(project); 
-        setCurrentView('detail'); 
-    }, []);
+        // --- Components ---
 
-    const goBack = useCallback((target) => { 
-        setCurrentView('home'); 
-        setSelectedProject(null); 
-        if (typeof target === 'string' && target.startsWith('#')) { 
-            setTimeout(() => { document.querySelector(target)?.scrollIntoView({ behavior: 'smooth' }); }, 50); 
-        } else { 
-            setTimeout(() => window.scrollTo(0, scrollPos.current), 50); 
-        } 
-    }, []);
+        const ThemeToggle = () => {
+            const [isDark, setIsDark] = useState(true);
 
-    return ( 
-        <div className="min-h-screen bg-[#050505] text-white selection:bg-indigo-500 selection:text-white overflow-x-hidden font-sans"> 
-            <div className="bg-mesh"></div> 
-            <Spotlight /> 
-            <BackgroundBlobs /> 
-            <CustomCursor /> 
-            <Preloader isLoading={isLoading} onAnimationDone={() => setIsLoading(false)} /> 
-            <div className="fixed bottom-6 right-6 z-[60] flex flex-col gap-3 pointer-events-none"> 
-                {toasts.map(t => <Toast key={t.id} message={t.message} type={t.type} onClose={() => setToasts(prev => prev.filter(i => i.id !== t.id))} />)} 
-            </div> 
-            <Navigation currentView={currentView} isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} onNavigate={handleNav} /> 
-            <CircularScrollButton currentView={currentView} /> 
-            
-            <main className="relative z-10 w-full"> 
-                {currentView === 'home' && <HomePage onProjectClick={handleProjectClick} addToast={addToast} />} 
-                {currentView === 'playground' && <PlaygroundPage onBack={goBack} onItemClick={(item) => handleProjectClick(item, 'playground')} />} 
-                {currentView === 'detail' && selectedProject && <ProjectDetailPage project={selectedProject} onBack={goBack} onHome={goBack} />} 
-            </main> 
-        </div> 
-    ); 
-};
+            useEffect(() => {
+                const saved = localStorage.getItem('theme');
+                if (saved === 'light') {
+                    setIsDark(false);
+                    document.documentElement.classList.remove('dark');
+                }
+            }, []);
 
-const root = ReactDOM.createRoot(document.getElementById('root')); 
-window.addEventListener('load', () => { root.render(<App />); }); 
-</script>
+            const toggle = () => {
+                const newMode = !isDark;
+                setIsDark(newMode);
+                if (newMode) {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('theme', 'light');
+                }
+            };
+
+            return (
+                <button 
+                    onClick={toggle} 
+                    className="p-2.5 rounded-full border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 transition-all duration-300 group"
+                    aria-label="Toggle Theme"
+                >
+                    {isDark ? <Icons.Sun size={18} className="text-yellow-400 group-hover:rotate-45 transition-transform" /> : <Icons.Moon size={18} className="text-indigo-600" />}
+                </button>
+            );
+        };
+
+        const Magnetic = ({ children }) => {
+            const ref = useRef(null);
+            const [position, setPosition] = useState({x:0, y:0});
+            const handleMouse = (e) => {
+                const { clientX, clientY } = e;
+                const { height, width, left, top } = ref.current.getBoundingClientRect();
+                setPosition({ x: (clientX - (left + width/2)) * 0.2, y: (clientY - (top + height/2)) * 0.2 });
+            }
+            const reset = () => setPosition({x:0, y:0});
+            return (
+                <div ref={ref} onMouseMove={handleMouse} onMouseLeave={reset} style={{transform: `translate3d(${position.x}px, ${position.y}px, 0)`, transition: 'transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)'}} className="inline-block">
+                    {children}
+                </div>
+            )
+        };
+
+        const LocationTime = () => {
+            const [time, setTime] = useState("");
+            useEffect(() => {
+                const interval = setInterval(() => {
+                    setTime(new Date().toLocaleTimeString('en-US', { timeZone: 'Asia/Dhaka', hour: '2-digit', minute: '2-digit', hour12: true }));
+                }, 1000);
+                return () => clearInterval(interval);
+            }, []);
+            return (
+                <div className="flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 text-xs font-mono text-neutral-500 dark:text-neutral-400">
+                    <Icons.Globe size={14} className="animate-pulse" />
+                    <span>Bangladesh <span className="text-black dark:text-white font-medium">{time}</span></span>
+                </div>
+            );
+        };
+
+        const Navigation = memo(({ onNavigate, scrolled }) => {
+            return (
+                <nav className={`fixed w-full z-50 top-0 left-0 transition-all duration-500 ${scrolled ? 'py-4 bg-white/80 dark:bg-neutral-950/80 backdrop-blur-xl border-b border-black/5 dark:border-white/5' : 'py-6'}`}>
+                    <div className="px-6 md:px-12 max-w-7xl mx-auto flex justify-between items-center">
+                        <div className="flex items-center gap-4">
+                            <div className="w-10 h-10 bg-black dark:bg-white rounded-lg flex items-center justify-center p-1.5">
+                                <span className="text-white dark:text-black font-bold">W</span>
+                            </div>
+                            <span className="hidden sm:block font-mono text-sm tracking-widest uppercase text-neutral-500">Creative Dev</span>
+                        </div>
+                        
+                        <div className="flex items-center gap-4">
+                            <LocationTime />
+                            <ThemeToggle />
+                            <div className="hidden md:flex gap-1 p-1 rounded-full border border-black/5 dark:border-white/5 bg-black/5 dark:bg-white/5">
+                                {['Work', 'Playground', 'Contact'].map(item => (
+                                    <button key={item} className="px-5 py-2 rounded-full text-sm font-medium hover:bg-white dark:hover:bg-neutral-800 transition-all">{item}</button>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+            );
+        });
+
+        const App = () => {
+            const [scrolled, setScrolled] = useState(false);
+            const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
+
+            useEffect(() => {
+                const handleScroll = () => setScrolled(window.scrollY > 20);
+                const handleMove = (e) => setCursorPos({ x: e.clientX, y: e.clientY });
+                window.addEventListener('scroll', handleScroll);
+                window.addEventListener('mousemove', handleMove);
+                return () => {
+                    window.removeEventListener('scroll', handleScroll);
+                    window.removeEventListener('mousemove', handleMove);
+                };
+            }, []);
+
+            return (
+                <div className="min-h-screen">
+                    <div className="bg-mesh"></div>
+                    
+                    {/* Custom Cursor */}
+                    <div className="fixed top-0 left-0 w-8 h-8 border border-neutral-400 rounded-full pointer-events-none z-[100] mix-blend-difference transition-transform duration-150 ease-out hidden md:block" style={{ transform: `translate3d(${cursorPos.x - 16}px, ${cursorPos.y - 16}px, 0)` }}></div>
+
+                    <Navigation scrolled={scrolled} />
+
+                    <main className="pt-40 px-6 md:px-12 max-w-7xl mx-auto">
+                        <section className="mb-32">
+                            <div className="inline-flex items-center gap-2 mb-6 text-green-500 font-mono text-xs uppercase tracking-widest">
+                                <span className="w-2 h-2 bg-green-500 rounded-full animate-ping"></span>
+                                Available for Projects
+                            </div>
+                            <h1 className="text-7xl md:text-[10rem] font-bold tracking-tighter leading-[0.8] mb-12">
+                                CREATIVE<br />
+                                <span className="text-neutral-300 dark:text-neutral-800 transition-colors">DEVELOPER.</span>
+                            </h1>
+                            <p className="max-w-xl text-xl text-neutral-500 leading-relaxed mb-10">
+                                Hi, I'm <span className="text-black dark:text-white font-medium">{personalInfo.name}</span>. I build expressive digital experiences with motion, precision, and modern tech.
+                            </p>
+                            <div className="flex gap-4">
+                                <button className="px-8 py-4 bg-black dark:bg-white text-white dark:text-black rounded-full font-bold hover:scale-105 transition-transform flex items-center gap-2">
+                                    View Projects <Icons.ArrowUpRight size={18} />
+                                </button>
+                            </div>
+                        </section>
+
+                        <section className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-40">
+                            {[1, 2].map(i => (
+                                <div key={i} className="dark-card p-12 rounded-3xl group cursor-pointer transition-all duration-500 hover:-translate-y-2">
+                                    <div className="flex justify-between items-start mb-20">
+                                        <Icons.Code2 size={40} className="text-indigo-500" />
+                                        <div className="opacity-0 group-hover:opacity-100 transition-opacity">
+                                            <Icons.ArrowUpRight size={24} />
+                                        </div>
+                                    </div>
+                                    <h3 className="text-3xl font-bold mb-4">Project {i}</h3>
+                                    <p className="text-neutral-500">Focused on high-performance interaction and clean UI architecture.</p>
+                                </div>
+                            ))}
+                        </section>
+                    </main>
+
+                    <footer className="py-20 border-t border-black/5 dark:border-white/5 text-center text-neutral-500 text-sm">
+                        <p>&copy; {new Date().getFullYear()} {personalInfo.name}. Stay creative.</p>
+                    </footer>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
 </body>
 </html>
