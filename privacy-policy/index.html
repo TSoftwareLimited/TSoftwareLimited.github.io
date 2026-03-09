@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Privacy Policy | Your Name</title>
+
+<style>
+
+:root{
+--bg:#0d0d0d;
+--text:#f5f5f5;
+--card:#161616;
+--primary:#3b82f6;
+}
+
+.light{
+--bg:#ffffff;
+--text:#111111;
+--card:#f3f4f6;
+--primary:#2563eb;
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Segoe UI,sans-serif;
+}
+
+body{
+background:var(--bg);
+color:var(--text);
+transition:.4s;
+line-height:1.7;
+}
+
+/* NAV */
+
+nav{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:20px 8%;
+background:rgba(0,0,0,.4);
+backdrop-filter:blur(10px);
+position:sticky;
+top:0;
+}
+
+.light nav{
+background:rgba(255,255,255,.7);
+}
+
+nav a{
+text-decoration:none;
+color:var(--text);
+font-weight:500;
+}
+
+.theme-btn{
+padding:6px 14px;
+border-radius:20px;
+border:1px solid var(--primary);
+background:none;
+color:var(--primary);
+cursor:pointer;
+}
+
+/* PAGE */
+
+.container{
+max-width:900px;
+margin:auto;
+padding:80px 20px;
+}
+
+h1{
+font-size:36px;
+margin-bottom:20px;
+}
+
+h2{
+margin-top:35px;
+margin-bottom:10px;
+}
+
+p{
+opacity:.9;
+}
+
+footer{
+text-align:center;
+padding:30px;
+opacity:.6;
+}
+
+</style>
+</head>
+
+<body>
+
+<nav>
+<a href="index.html">← Back to Home</a>
+<button class="theme-btn" onclick="toggleTheme()">Dark / Light</button>
+</nav>
+
+<div class="container">
+
+<h1>Privacy Policy</h1>
+
+<p>Last updated: 2026</p>
+
+<p>
+This Privacy Policy explains how information is collected, used, and protected when you visit this website.
+</p>
+
+<h2>Information We Collect</h2>
+
+<p>
+This website may collect limited personal information such as your name, email address, or message when you submit the contact form.
+</p>
+
+<h2>How We Use Your Information</h2>
+
+<p>
+Any information collected may be used to:
+</p>
+
+<p>
+• Respond to inquiries or messages<br>
+• Improve the website and services<br>
+• Communicate with users when necessary
+</p>
+
+<h2>Cookies</h2>
+
+<p>
+This website may use cookies to enhance user experience, remember preferences such as dark/light mode, and analyze website performance.
+</p>
+
+<h2>Third-Party Services</h2>
+
+<p>
+Some services such as analytics tools, hosting providers, or embedded content may collect limited technical data such as IP address or browser information.
+</p>
+
+<h2>Data Security</h2>
+
+<p>
+We take reasonable measures to protect your information but cannot guarantee complete security of data transmitted over the internet.
+</p>
+
+<h2>Your Rights</h2>
+
+<p>
+You have the right to request access, correction, or deletion of your personal data if it has been collected through this website.
+</p>
+
+<h2>Changes to This Policy</h2>
+
+<p>
+This Privacy Policy may be updated from time to time. Updates will be posted on this page.
+</p>
+
+<h2>Contact</h2>
+
+<p>
+If you have questions about this Privacy Policy, you may contact the website owner through the contact form on the homepage.
+</p>
+
+</div>
+
+<footer>
+© 2026 Your Name. All Rights Reserved.
+</footer>
+
+<script>
+
+function toggleTheme(){
+document.body.classList.toggle("light");
+
+localStorage.setItem(
+"theme",
+document.body.classList.contains("light") ? "light" : "dark"
+);
+}
+
+window.onload=function(){
+if(localStorage.getItem("theme")==="light"){
+document.body.classList.add("light");
+}
+}
+
+</script>
+
+</body>
+</html>
