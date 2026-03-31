@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="bn" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>উইকিপিডিয়া.পাতা.বাংলা</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Hind Siliguri"', 'sans-serif'],
+                    },
+                    colors: {
+                        zinc: {
+                            850: '#202022',
+                            950: '#0c0c0e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom scrollbar for a polished look */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #18181b; }
+        ::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #52525b; }
+    </style>
+</head>
+<body class="bg-zinc-950 text-zinc-300 font-sans antialiased selection:bg-blue-500/30 selection:text-blue-200">
+
+    <nav class="sticky top-0 z-50 bg-zinc-950/70 backdrop-blur-xl border-b border-white/5 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex-shrink-0 flex items-center gap-3 cursor-pointer group">
+                    <div class="w-10 h-10 bg-gradient-to-br from-zinc-700 to-zinc-900 border border-zinc-700 rounded-xl flex items-center justify-center shadow-inner group-hover:border-zinc-500 transition-colors">
+                        <span class="text-2xl text-zinc-100 font-bold">উ</span>
+                    </div>
+                    <span class="text-xl font-bold text-zinc-100 tracking-wide">উইকিপিডিয়া.<span class="text-zinc-500">পাতা.বাংলা</span></span>
+                </div>
+
+                <div class="flex-1 max-w-2xl mx-8 hidden md:block">
+                    <div class="relative group">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                            <svg class="h-5 w-5 text-zinc-500 group-focus-within:text-blue-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                        </div>
+                        <input type="text" id="searchInput" class="block w-full pl-12 pr-4 py-3 border border-zinc-800 rounded-2xl leading-5 bg-zinc-900/50 text-zinc-200 placeholder-zinc-500 focus:outline-none focus:ring-1 focus:ring-blue-500/50 focus:border-blue-500/50 focus:bg-zinc-900 transition-all duration-300 shadow-inner" placeholder="কী খুঁজতে চান? (যেমন: বাংলাদেশ, বিজ্ঞান, ইতিহাস)...">
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-4">
+                    <button class="text-zinc-400 hover:text-zinc-100 transition-colors font-medium">প্রবেশ করুন</button>
+                    <button class="bg-zinc-100 text-zinc-950 px-5 py-2.5 rounded-xl font-semibold hover:bg-white hover:shadow-[0_0_20px_rgba(255,255,255,0.2)] transition-all">নিবন্ধন</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+
+            <article class="col-span-1 md:col-span-8 group relative bg-zinc-900/40 border border-zinc-800/60 rounded-3xl p-8 backdrop-blur-md hover:bg-zinc-850/60 transition-all duration-500 overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div class="relative z-10">
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="px-3 py-1 bg-zinc-800 text-xs font-semibold tracking-wider rounded-lg text-zinc-300 border border-zinc-700">নির্বাচিত নিবন্ধ</span>
+                        <span class="text-zinc-500 text-sm">আজকের সেরা</span>
+                    </div>
+                    <h2 class="text-4xl font-bold text-zinc-100 mb-4 leading-tight group-hover:text-blue-400 transition-colors cursor-pointer">সুন্দরবন: বিশ্বের বৃহত্তম ম্যানগ্রোভ বন</h2>
+                    <p class="text-zinc-400 leading-relaxed text-lg mb-6 line-clamp-3">
+                        সুন্দরবন হলো বঙ্গোপসাগর উপকূলবর্তী অঞ্চলে অবস্থিত একটি প্রশস্ত বনভূমি যা বিশ্বের প্রাকৃতিক বিস্ময়াবলীর অন্যতম। গঙ্গা, মেঘনা ও ব্রহ্মপুত্র নদীত্রয়ের অববাহিকায় বদ্বীপ এলাকায় অবস্থিত এই অপরূপ বনভূমি বাংলাদেশের খুলনা, সাতক্ষীরা ও বাগেরহাট জেলা এবং ভারতের পশ্চিমবঙ্গ রাজ্যের দুই জেলা জুড়ে বিস্তৃত।
+                    </p>
+                    <button class="flex items-center gap-2 text-zinc-100 font-medium hover:text-blue-400 transition-colors">
+                        সম্পূর্ণ পড়ুন 
+                        <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    </button>
+                </div>
+            </article>
+
+            <aside class="col-span-1 md:col-span-4 bg-zinc-900/40 border border-zinc-800/60 rounded-3xl p-8 backdrop-blur-md hover:border-zinc-700/80 transition-all duration-300">
+                <h3 class="text-xl font-bold text-zinc-100 mb-6 flex items-center gap-2">
+                    <svg class="w-5 h-5 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    আপনি কি জানেন...
+                </h3>
+                <ul class="space-y-5">
+                    <li class="flex items-start gap-3 group cursor-pointer">
+                        <span class="w-2 h-2 rounded-full bg-zinc-700 mt-2 group-hover:bg-blue-400 transition-colors"></span>
+                        <p class="text-zinc-400 group-hover:text-zinc-200 transition-colors leading-relaxed">...যে <b>মৌমাছি</b> একমাত্র পতঙ্গ যা মানুষের জন্য খাদ্য উৎপাদন করে?</p>
+                    </li>
+                    <li class="flex items-start gap-3 group cursor-pointer">
+                        <span class="w-2 h-2 rounded-full bg-zinc-700 mt-2 group-hover:bg-blue-400 transition-colors"></span>
+                        <p class="text-zinc-400 group-hover:text-zinc-200 transition-colors leading-relaxed">...যে <b>অক্টোপাসের</b> তিনটি হৃৎপিণ্ড থাকে?</p>
+                    </li>
+                    <li class="flex items-start gap-3 group cursor-pointer">
+                        <span class="w-2 h-2 rounded-full bg-zinc-700 mt-2 group-hover:bg-blue-400 transition-colors"></span>
+                        <p class="text-zinc-400 group-hover:text-zinc-200 transition-colors leading-relaxed">...যে <b>ভুটান</b> বিশ্বের একমাত্র কার্বন-নেতিবাচক দেশ?</p>
+                    </li>
+                </ul>
+            </aside>
+
+            <section class="col-span-1 md:col-span-4 bg-gradient-to-b from-zinc-900/40 to-zinc-900/20 border border-zinc-800/60 rounded-3xl p-8 backdrop-blur-md">
+                <h3 class="text-xl font-bold text-zinc-100 mb-6 flex items-center gap-2">
+                    <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path></svg>
+                    খবর ও সমসাময়িক
+                </h3>
+                <div class="space-y-4">
+                    <a href="#" class="block p-4 rounded-2xl bg-zinc-800/30 hover:bg-zinc-800/80 border border-transparent hover:border-zinc-700 transition-all">
+                        <p class="text-zinc-200 font-medium mb-2">কৃত্রিম বুদ্ধিমত্তায় নতুন মাইলফলক অর্জন করল বিজ্ঞানীরা।</p>
+                        <span class="text-xs text-zinc-500">২ ঘণ্টা আগে</span>
+                    </a>
+                    <a href="#" class="block p-4 rounded-2xl bg-zinc-800/30 hover:bg-zinc-800/80 border border-transparent hover:border-zinc-700 transition-all">
+                        <p class="text-zinc-200 font-medium mb-2">আন্তর্জাতিক মহাকাশ স্টেশনে সফলভাবে ডকিং সম্পন্ন।</p>
+                        <span class="text-xs text-zinc-500">৫ ঘণ্টা আগে</span>
+                    </a>
+                </div>
+            </section>
+
+            <section class="col-span-1 md:col-span-8 bg-zinc-900/40 border border-zinc-800/60 rounded-3xl p-8 backdrop-blur-md">
+                <div class="flex justify-between items-end mb-6">
+                    <h3 class="text-2xl font-bold text-zinc-100 flex items-center gap-2">
+                        <svg class="w-6 h-6 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        আজকের দিনে
+                    </h3>
+                    <span class="text-zinc-500 font-medium">৩১ মার্চ</span>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div class="p-5 rounded-2xl border border-zinc-800 bg-zinc-900/50">
+                        <span class="text-blue-400 font-bold text-xl block mb-2">১৮৮৯</span>
+                        <p class="text-zinc-300">প্যারিসে আইফেল টাওয়ার সর্বসাধারণের জন্য উন্মুক্ত করা হয়।</p>
+                    </div>
+                    <div class="p-5 rounded-2xl border border-zinc-800 bg-zinc-900/50">
+                        <span class="text-blue-400 font-bold text-xl block mb-2">১৯৬৬</span>
+                        <p class="text-zinc-300">সোভিয়েত মহাকাশযান লুনা ১০ চাঁদের কক্ষপথে প্রবেশ করে।</p>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <script>
+        // Add subtle glow effect to search box on focus
+        const searchInput = document.getElementById('searchInput');
+        searchInput.addEventListener('focus', () => {
+            searchInput.parentElement.classList.add('shadow-[0_0_15px_rgba(59,130,246,0.1)]');
+        });
+        searchInput.addEventListener('blur', () => {
+            searchInput.parentElement.classList.remove('shadow-[0_0_15px_rgba(59,130,246,0.1)]');
+        });
+    </script>
+</body>
+  </html>
