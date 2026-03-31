@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="bn" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>উইকিপিডিয়া.পাতা.বাংলা</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Hind Siliguri"', 'sans-serif'],
+                    },
+                    colors: {
+                        zinc: {
+                            850: '#202022',
+                            950: '#0c0c0e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        .dark ::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: #d4d4d8; border-radius: 4px; }
+        .dark ::-webkit-scrollbar-thumb:hover { background: #52525b; }
+        ::-webkit-scrollbar-thumb:hover { background: #a1a1aa; }
+        
+        /* Smooth transitions for theme switching */
+        body { transition: background-color 0.3s ease, color 0.3s ease; }
+    </style>
+</head>
+<body class="bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-300 font-sans antialiased selection:bg-blue-500/30 selection:text-blue-800 dark:selection:text-blue-200 min-h-screen">
+
+    <nav class="sticky top-0 z-50 bg-white/70 dark:bg-zinc-950/70 backdrop-blur-xl border-b border-zinc-200 dark:border-white/5 shadow-sm dark:shadow-lg transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                
+                <div class="flex-shrink-0 flex items-center gap-3 cursor-pointer group">
+                    <div class="w-10 h-10 bg-gradient-to-br from-zinc-200 to-zinc-300 dark:from-zinc-700 dark:to-zinc-900 border border-zinc-300 dark:border-zinc-700 rounded-xl flex items-center justify-center shadow-inner group-hover:border-zinc-400 dark:group-hover:border-zinc-500 transition-colors">
+                        <span class="text-2xl text-zinc-800 dark:text-zinc-100 font-bold">উ</span>
+                    </div>
+                    <span class="text-xl font-bold text-zinc-800 dark:text-zinc-100 tracking-wide hidden sm:block">উইকিপিডিয়া.<span class="text-zinc-500">পাতা.বাংলা</span></span>
+                </div>
+
+                <div class="flex-1 max-w-2xl mx-4 sm:mx-8 hidden md:block relative">
+                    <div class="relative group" id="searchContainer">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                            <svg class="h-5 w-5 text-zinc-400 dark:text-zinc-500 group-focus-within:text-blue-500 dark:group-focus-within:text-blue-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                        </div>
+                        <input type="text" id="searchInput" class="block w-full pl-12 pr-4 py-3 border border-zinc-300 dark:border-zinc-800 rounded-2xl leading-5 bg-white dark:bg-zinc-900/50 text-zinc-900 dark:text-zinc-200 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:focus:ring-blue-500/50 focus:border-blue-500 dark:focus:border-blue-500/50 dark:focus:bg-zinc-900 transition-all duration-300 shadow-sm dark:shadow-inner" placeholder="কী খুঁজতে চান? (যেমন: বাংলাদেশ, বিজ্ঞান)...">
+                        
+                        <div id="searchDropdown" class="absolute w-full mt-2 bg-white/90 dark:bg-zinc-900/90 backdrop-blur-xl border border-zinc-200 dark:border-zinc-800 rounded-2xl shadow-xl overflow-hidden opacity-0 invisible transform -translate-y-2 transition-all duration-300 z-50">
+                            <div class="p-2 space-y-1" id="searchResults">
+                                </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-3 sm:gap-4">
+                    <button id="themeToggle" class="p-2.5 rounded-xl text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-900 dark:hover:bg-zinc-800 transition-all border border-transparent dark:border-zinc-800" aria-label="Toggle Theme">
+                        <svg id="sunIcon" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                        <svg id="moonIcon" class="w-5 h-5 block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                    </button>
+
+                    <button class="hidden md:block text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors font-medium">প্রবেশ করুন</button>
+                    <button class="hidden md:block bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-950 px-5 py-2.5 rounded-xl font-semibold hover:bg-zinc-800 dark:hover:bg-white hover:shadow-[0_0_15px_rgba(0,0,0,0.1)] dark:hover:shadow-[0_0_20px_rgba(255,255,255,0.2)] transition-all">নিবন্ধন</button>
+                    
+                    <button id="mobileMenuBtn" class="md:hidden p-2.5 rounded-xl text-zinc-600 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-900 transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div id="mobileMenu" class="fixed inset-0 bg-white/95 dark:bg-zinc-950/95 backdrop-blur-2xl z-40 transform translate-x-full transition-transform duration-300 flex flex-col pt-24 px-6">
+        <div class="flex-1 space-y-6">
+            <input type="text" class="block w-full px-4 py-3 border border-zinc-300 dark:border-zinc-800 rounded-xl bg-zinc-50 dark:bg-zinc-900 text-zinc-900 dark:text-zinc-200 focus:outline-none focus:border-blue-500" placeholder="অনুসন্ধান করুন...">
+            <div class="flex flex-col gap-4 text-lg">
+                <a href="#" class="text-zinc-800 dark:text-zinc-200 font-medium">প্রবেশ করুন</a>
+                <a href="#" class="text-zinc-800 dark:text-zinc-200 font-medium">নিবন্ধন</a>
+                <hr class="border-zinc-200 dark:border-zinc-800">
+                <a href="#" class="text-zinc-600 dark:text-zinc-400">নির্বাচিত নিবন্ধ</a>
+                <a href="#" class="text-zinc-600 dark:text-zinc-400">আজকের দিনে</a>
+            </div>
+        </div>
+        <div class="pb-8">
+            <button id="closeMobileMenu" class="w-full py-3 bg-zinc-200 dark:bg-zinc-800 rounded-xl text-zinc-800 dark:text-zinc-200 font-bold">বন্ধ করুন</button>
+        </div>
+    </div>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 transition-colors">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+
+            <article class="col-span-1 md:col-span-8 group relative bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800/60 rounded-3xl p-8 shadow-sm dark:shadow-none backdrop-blur-md hover:border-blue-200 dark:hover:bg-zinc-850/60 transition-all duration-500 overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+                <div class="relative z-10">
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="px-3 py-1 bg-zinc-100 dark:bg-zinc-800 text-xs font-semibold tracking-wider rounded-lg text-zinc-600 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-700">নির্বাচিত নিবন্ধ</span>
+                        <span class="text-zinc-500 text-sm font-medium">আজকের সেরা</span>
+                    </div>
+                    <h2 class="text-3xl sm:text-4xl font-bold text-zinc-900 dark:text-zinc-100 mb-4 leading-tight group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors cursor-pointer">সুন্দরবন: বিশ্বের বৃহত্তম ম্যানগ্রোভ বন</h2>
+                    <p class="text-zinc-600 dark:text-zinc-400 leading-relaxed text-lg mb-6 line-clamp-3">
+                        সুন্দরবন হলো বঙ্গোপসাগর উপকূলবর্তী অঞ্চলে অবস্থিত একটি প্রশস্ত বনভূমি যা বিশ্বের প্রাকৃতিক বিস্ময়াবলীর অন্যতম। গঙ্গা, মেঘনা ও ব্রহ্মপুত্র নদীত্রয়ের অববাহিকায় বদ্বীপ এলাকায় অবস্থিত এই অপরূপ বনভূমি বাংলাদেশের খুলনা, সাতক্ষীরা ও বাগেরহাট জেলা এবং ভারতের পশ্চিমবঙ্গ রাজ্যের দুই জেলা জুড়ে বিস্তৃত।
+                    </p>
+                    <button class="flex items-center gap-2 text-zinc-800 dark:text-zinc-100 font-bold hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                        সম্পূর্ণ পড়ুন 
+                        <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    </button>
+                </div>
+            </article>
+
+            <aside class="col-span-1 md:col-span-4 bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800/60 rounded-3xl p-8 shadow-sm dark:shadow-none backdrop-blur-md hover:border-zinc-300 dark:hover:border-zinc-700/80 transition-all duration-300">
+                <h3 class="text-xl font-bold text-zinc-900 dark:text-zinc-100 mb-6 flex items-center gap-2">
+                    <svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    আপনি কি জানেন...
+                </h3>
+                <ul class="space-y-5">
+                    <li class="flex items-start gap-3 group cursor-pointer">
+                        <span class="w-2 h-2 rounded-full bg-zinc-300 dark:bg-zinc-700 mt-2.5 group-hover:bg-blue-500 transition-colors flex-shrink-0"></span>
+                        <p class="text-zinc-600 dark:text-zinc-400 group-hover:text-zinc-900 dark:group-hover:text-zinc-200 transition-colors leading-relaxed">...যে <b>মৌমাছি</b> একমাত্র পতঙ্গ যা মানুষের জন্য খাদ্য উৎপাদন করে?</p>
+                    </li>
+                    <li class="flex items-start gap-3 group cursor-pointer">
+                        <span class="w-2 h-2 rounded-full bg-zinc-300 dark:bg-zinc-700 mt-2.5 group-hover:bg-blue-500 transition-colors flex-shrink-0"></span>
+                        <p class="text-zinc-600 dark:text-zinc-400 group-hover:text-zinc-900 dark:group-hover:text-zinc-200 transition-colors leading-relaxed">...যে <b>অক্টোপাসের</b> তিনটি হৃৎপিণ্ড থাকে?</p>
+                    </li>
+                    <li class="flex items-start gap-3 group cursor-pointer">
+                        <span class="w-2 h-2 rounded-full bg-zinc-300 dark:bg-zinc-700 mt-2.5 group-hover:bg-blue-500 transition-colors flex-shrink-0"></span>
+                        <p class="text-zinc-600 dark:text-zinc-400 group-hover:text-zinc-900 dark:group-hover:text-zinc-200 transition-colors leading-relaxed">...যে <b>ভুটান</b> বিশ্বের একমাত্র কার্বন-নেতিবাচক দেশ?</p>
+                    </li>
+                </ul>
+            </aside>
+
+        </div>
+    </main>
+
+    <script>
+        // --- 1. Dark/Light Mode Toggle Logic ---
+        const themeToggleBtn = document.getElementById('themeToggle');
+        const sunIcon = document.getElementById('sunIcon');
+        const moonIcon = document.getElementById('moonIcon');
+        const htmlElement = document.documentElement;
+
+        // Check user's system preference or local storage on load (defaulting to dark based on HTML class)
+        function updateThemeIcons(isDark) {
+            if (isDark) {
+                sunIcon.classList.remove('hidden');
+                moonIcon.classList.add('hidden');
+            } else {
+                sunIcon.classList.add('hidden');
+                moonIcon.classList.remove('hidden');
+            }
+        }
+
+        // Initialize icon state
+        updateThemeIcons(htmlElement.classList.contains('dark'));
+
+        themeToggleBtn.addEventListener('click', () => {
+            htmlElement.classList.toggle('dark');
+            const isDark = htmlElement.classList.contains('dark');
+            updateThemeIcons(isDark);
+            // In a real app, you would save this preference to localStorage here
+        });
+
+        // --- 2. Live Search Autocomplete Mockup ---
+        const searchInput = document.getElementById('searchInput');
+        const searchDropdown = document.getElementById('searchDropdown');
+        const searchResults = document.getElementById('searchResults');
+        
+        // Mock data for search
+        const mockData = [
+            "বাংলাদেশ", "বাংলাদেশের ইতিহাস", "বিজ্ঞান ও প্রযুক্তি", 
+            "বিন্দু লেআউট", "বুটস্ট্র্যাপ", "কৃত্রিম বুদ্ধিমত্তা", "কাজী নজরুল ইসলাম"
+        ];
+
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.trim().toLowerCase();
+            
+            if (query.length > 0) {
+                // Filter mock data based on input
+                const filtered = mockData.filter(item => item.includes(query));
+                
+                if (filtered.length > 0) {
+                    searchResults.innerHTML = filtered.map(item => `
+                        <a href="#" class="block px-4 py-2.5 rounded-xl text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:text-blue-600 dark:hover:text-blue-400 transition-colors flex items-center gap-3">
+                            <svg class="w-4 h-4 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                            ${item}
+                        </a>
+                    `).join('');
+                } else {
+                    searchResults.innerHTML = `<div class="px-4 py-3 text-sm text-zinc-500">কোন ফলাফল পাওয়া যায়নি</div>`;
+                }
+
+                // Show dropdown
+                searchDropdown.classList.remove('opacity-0', 'invisible', '-translate-y-2');
+                searchDropdown.classList.add('opacity-100', 'visible', 'translate-y-0');
+            } else {
+                // Hide dropdown
+                searchDropdown.classList.add('opacity-0', 'invisible', '-translate-y-2');
+                searchDropdown.classList.remove('opacity-100', 'visible', 'translate-y-0');
+            }
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!document.getElementById('searchContainer').contains(e.target)) {
+                searchDropdown.classList.add('opacity-0', 'invisible', '-translate-y-2');
+                searchDropdown.classList.remove('opacity-100', 'visible', 'translate-y-0');
+            }
+        });
+
+        // --- 3. Mobile Navigation Menu Logic ---
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const closeMobileMenu = document.getElementById('closeMobileMenu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.remove('translate-x-full');
+            document.body.style.overflow = 'hidden'; // Prevent scrolling when menu is open
+        });
+
+        closeMobileMenu.addEventListener('click', () => {
+            mobileMenu.classList.add('translate-x-full');
+            document.body.style.overflow = '';
+        });
+    </script>
+</body>
+</html>
