@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Live TV Channels</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#f0f9ff',
+              100: '#e0f2fe',
+              400: '#38bdf8',
+              500: '#0ea5e9',
+              600: '#0284c7',
+              700: '#0369a1',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- HLS.js for stream playback and live probing -->
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
+  <style>
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 7px;
+      height: 7px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #090d16;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #334155;
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-sky-500 selection:text-white">
+
+  <!-- Top Navigation Bar -->
+  <header class="sticky top-0 z-30 bg-slate-950/85 backdrop-blur-md border-b border-slate-800/80 px-3 sm:px-6 lg:px-8 py-3 shadow-lg shadow-black/30">
+    <div class="max-w-7xl mx-auto flex items-center justify-between gap-2 sm:gap-4">
+      
+      <!-- Brand & Stats -->
+      <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
+        <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-sky-600 to-cyan-400 flex items-center justify-center shadow-lg shadow-sky-500/20 text-white font-black text-lg sm:text-xl flex-shrink-0">
+          <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+            <path d="M21 3H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h5v2h8v-2h5c1.1 0 1.99-.9 1.99-2L23 5c0-1.1-.9-2-2-2zm0 14H3V5h18v12z"/>
+          </svg>
+        </div>
+        <div class="min-w-0">
+          <h1 class="text-base sm:text-xl font-extrabold tracking-tight bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent truncate">
+            Live TV Hub
+          </h1>
+          <p class="text-[10px] sm:text-xs text-slate-400 font-medium truncate hidden xs:block">Cloudflare D1 Channels & Sources</p>
+        </div>
+      </div>
+
+      <!-- Action Buttons (Responsive for all devices) -->
+      <div class="flex items-center gap-1.5 sm:gap-3 flex-shrink-0">
+        <div class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-[11px] sm:text-xs font-medium text-slate-400">
+          <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse flex-shrink-0"></span>
+          <span class="hidden sm:inline">Channels:</span> <span id="totalBadge" class="text-sky-400 font-bold">0</span>
+        </div>
+
+        <button onclick="loadChannels()" id="refreshBtn" title="Refresh channels list" class="p-2 sm:px-3 sm:py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-slate-700 text-slate-300 hover:text-white text-xs font-semibold flex items-center gap-1.5 transition-all active:scale-95">
+          <svg id="refreshIcon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+          </svg>
+          <span class="hidden sm:inline">Refresh</span>
+        </button>
+
+        <button onclick="openAddChannelModal()" class="px-3 sm:px-4 py-2 rounded-xl bg-gradient-to-r from-sky-500 to-cyan-500 hover:from-sky-400 hover:to-cyan-400 text-slate-950 font-bold text-xs flex items-center gap-1.5 shadow-lg shadow-sky-500/25 transition-all hover:-translate-y-0.5 active:translate-y-0">
+          <svg class="w-4 h-4 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+          </svg>
+          <span class="hidden xs:inline">Add Channel</span>
+          <span class="xs:hidden">Add</span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="max-w-7xl w-full mx-auto px-4 lg:px-8 py-6 flex-1 flex flex-col">
+    
+    <!-- Controls Section: Search & Category Filter -->
+    <div class="bg-slate-900/90 border border-slate-800/80 rounded-2xl p-3.5 sm:p-4 mb-6 shadow-xl backdrop-blur-sm">
+      <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+        
+        <!-- Search Bar -->
+        <div class="relative flex-1">
+          <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+            </svg>
+          </div>
+          <input 
+            type="text" 
+            id="searchInput" 
+            placeholder="Search channels by name or category..." 
+            class="w-full bg-slate-950 border border-slate-800 focus:border-sky-500 text-slate-100 placeholder-slate-500 pl-10 pr-10 py-2.5 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-sky-500/20 transition-all"
+            autocomplete="off"
+          />
+          <button 
+            id="clearSearchBtn" 
+            onclick="clearSearch()" 
+            class="hidden absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-white"
+            title="Clear search"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+        </div>
+
+        <!-- Category Dropdown -->
+        <div class="w-full sm:w-64">
+          <select 
+            id="categorySelect" 
+            class="w-full bg-slate-950 border border-slate-800 focus:border-sky-500 text-slate-200 py-2.5 px-3.5 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-sky-500/20 transition-all cursor-pointer"
+          >
+            <option value="ALL">All Categories</option>
+          </select>
+        </div>
+
+      </div>
+
+      <!-- Result Counter & Filters Info -->
+      <div class="mt-3 pt-3 border-t border-slate-800/60 flex items-center justify-between text-xs text-slate-400">
+        <div>
+          Showing <span id="filteredCount" class="font-bold text-sky-400">0</span> matching channels
+        </div>
+        <div class="text-slate-500">
+          Layout: <span class="text-slate-400 font-medium">2 Columns</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading State -->
+    <div id="loadingState" class="py-20 flex flex-col items-center justify-center text-center">
+      <div class="relative w-12 h-12">
+        <div class="w-12 h-12 rounded-full border-4 border-slate-800 border-t-sky-500 animate-spin"></div>
+      </div>
+      <p class="mt-4 text-slate-400 text-sm font-medium">Loading channels from D1 API...</p>
+    </div>
+
+    <!-- Error State -->
+    <div id="errorState" class="hidden py-16 flex flex-col items-center justify-center text-center">
+      <div class="w-14 h-14 rounded-2xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-400 mb-3">
+        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+        </svg>
+      </div>
+      <h3 class="text-lg font-bold text-white mb-1">Failed to fetch channels</h3>
+      <p class="text-slate-400 text-xs max-w-sm mb-4">Please check your network connection or the worker service availability.</p>
+      <button onclick="loadChannels()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs border border-slate-700 transition-all">
+        Try Again
+      </button>
+    </div>
+
+    <!-- Empty Results -->
+    <div id="emptyState" class="hidden py-16 flex flex-col items-center justify-center text-center">
+      <div class="w-14 h-14 rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-500 mb-3">
+        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+      </div>
+      <h3 class="text-base font-bold text-white mb-1">No channels found</h3>
+      <p class="text-slate-400 text-xs">Try adjusting your search query or selected category.</p>
+    </div>
+
+    <!-- 2 IN COLUMN CHANNELS GRID -->
+    <div id="channelsGrid" class="hidden grid grid-cols-2 gap-3 sm:gap-4.5">
+      <!-- Cards dynamically injected here -->
+    </div>
+
+  </main>
+
+  <!-- ========================================================== -->
+  <!-- MULTI-SOURCE SEARCH & ADD CHANNEL POPUP MODAL -->
+  <!-- ========================================================== -->
+  <div id="addChannelModal" class="fixed inset-0 z-50 hidden items-center justify-center p-2.5 sm:p-5 bg-slate-950/85 backdrop-blur-md">
+    <div class="relative w-full max-w-3xl bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl flex flex-col max-h-[92dvh] sm:max-h-[90vh] overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+      
+      <!-- Modal Header -->
+      <div class="px-3.5 py-3 sm:px-6 sm:py-4 border-b border-slate-800 flex items-center justify-between bg-slate-950/60">
+        <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
+          <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-sky-500/10 border border-sky-500/25 flex items-center justify-center text-sky-400 flex-shrink-0">
+            <svg class="w-4 h-4 sm:w-5 sm:h-5 stroke-[2.2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+            </svg>
+          </div>
+          <div class="min-w-0">
+            <h3 class="text-sm sm:text-base font-bold text-white truncate">Search & Add Channel</h3>
+            <p class="text-[11px] sm:text-xs text-slate-400 truncate">
+              <span>Sources: </span>
+              <span id="sourcesCountBadge" class="text-sky-400 font-semibold">fetching sources...</span>
+            </p>
+          </div>
+        </div>
+
+        <button onclick="closeAddChannelModal()" class="w-8 h-8 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 flex items-center justify-center transition-colors flex-shrink-0">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <!-- Mode Switch Tabs -->
+      <div class="px-3.5 pt-2 sm:px-6 sm:pt-3 border-b border-slate-800/80 bg-slate-950/30 flex items-center gap-2">
+        <button id="tabSourcesBtn" onclick="switchAddTab('sources')" class="px-3 py-2 text-xs font-bold border-b-2 border-sky-400 text-sky-400 flex items-center gap-1.5 transition-colors">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          Search Playlists
+        </button>
+        <button id="tabManualBtn" onclick="switchAddTab('manual')" class="px-3 py-2 text-xs font-semibold border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center gap-1.5 transition-colors">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+          Manual Input
+        </button>
+      </div>
+
+      <!-- TAB 1: SEARCH SOURCES SECTION -->
+      <div id="tabSourcesContent" class="flex-1 flex flex-col overflow-hidden p-3.5 sm:p-5">
+        
+        <!-- Search Input Bar -->
+        <div class="flex gap-2">
+          <div class="relative flex-1">
+            <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+              </svg>
+            </div>
+            <input 
+              type="text" 
+              id="sourceSearchInput" 
+              placeholder="Enter channel name & hit Enter (e.g., T Sports, Sony Ten, Star, Geo)..."
+              class="w-full bg-slate-950 border border-slate-800 focus:border-sky-500 text-slate-100 placeholder-slate-500 pl-10 pr-4 py-2.5 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-sky-500/20 transition-all"
+              onkeydown="handleSourceSearchKey(event)"
+            />
+          </div>
+          <button 
+            id="sourceSearchBtn" 
+            onclick="executeSourceSearch()" 
+            class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-sky-500 to-cyan-500 hover:from-sky-400 hover:to-cyan-400 text-slate-950 font-bold text-xs flex items-center gap-2 shadow-md shadow-sky-500/20 transition-all flex-shrink-0"
+          >
+            <span id="searchBtnIcon">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            </span>
+            <span id="searchBtnSpinner" class="hidden w-4 h-4 border-2 border-slate-950 border-t-transparent rounded-full animate-spin"></span>
+            <span>Search</span>
+          </button>
+        </div>
+
+        <!-- Search Status / Progress Bar -->
+        <div id="sourceSearchStatus" class="hidden mt-3 px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-800 text-xs flex items-center justify-between text-slate-300">
+          <span id="sourceSearchStatusText">Scanning playlists...</span>
+          <span id="sourceSearchProgressBadge" class="font-bold text-sky-400">0%</span>
+        </div>
+
+        <!-- Datalist for existing group options -->
+        <datalist id="allGroupDatalist"></datalist>
+
+        <!-- Batch Group Selector Bar -->
+        <div id="batchGroupBar" class="hidden mt-2.5 flex flex-wrap items-center justify-between gap-2 px-3.5 py-2 rounded-xl bg-slate-950/80 border border-slate-800 text-xs">
+          <div class="flex items-center gap-2">
+            <span class="text-slate-400 font-medium">Batch Assign Group:</span>
+            <input 
+              list="allGroupDatalist" 
+              id="batchGroupInput" 
+              placeholder="Pick or type group name..." 
+              class="bg-slate-900 border border-slate-700 hover:border-sky-500 focus:border-sky-400 text-sky-300 text-xs rounded-lg px-2.5 py-1 outline-none w-44"
+            />
+            <button 
+              type="button" 
+              onclick="applyBatchGroupToAll()" 
+              class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold transition-all hover:text-white"
+            >
+              Apply to All
+            </button>
+          </div>
+          <span class="text-[11px] text-slate-500">Or change each channel's group individually</span>
+        </div>
+
+        <!-- Discovered Channels List -->
+        <div class="mt-4 flex-1 overflow-y-auto pr-1">
+          <div id="sourceResultsList" class="space-y-2.5">
+            <!-- Initial prompt state -->
+            <div id="sourceInitialState" class="py-12 text-center text-slate-500 text-xs">
+              <svg class="w-10 h-10 mx-auto stroke-slate-600 mb-2" fill="none" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 100-6 3 3 0 000 6z"/>
+              </svg>
+              <p class="font-medium text-slate-400 text-sm">Enter a channel title to query all playlist sources</p>
+              <p class="mt-1 text-slate-500">Live streams will be automatically probed and can be saved to your database.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- TAB 2: MANUAL INPUT SECTION -->
+      <div id="tabManualContent" class="hidden flex-1 overflow-y-auto p-5">
+        <form id="manualAddForm" onsubmit="handleManualAdd(event)" class="space-y-4">
+          
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1.5">
+              Channel Title <span class="text-rose-400">*</span>
+            </label>
+            <input 
+              type="text" 
+              id="manualTitle" 
+              required 
+              placeholder="e.g. ESPN HD, T Sports, Sony Ten" 
+              class="w-full bg-slate-950 border border-slate-800 focus:border-sky-500 rounded-xl px-3.5 py-2.5 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20 transition-all"
+            />
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1.5">
+              Stream URL (.m3u8) <span class="text-rose-400">*</span>
+            </label>
+            <input 
+              type="url" 
+              id="manualStreamUrl" 
+              required 
+              placeholder="https://example.com/live/stream.m3u8" 
+              class="w-full bg-slate-950 border border-slate-800 focus:border-sky-500 rounded-xl px-3.5 py-2.5 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20 transition-all"
+            />
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1.5">Category / Group</label>
+              <input 
+                type="text" 
+                id="manualGroup" 
+                list="allGroupDatalist"
+                placeholder="e.g. SPORTS, BANGLA, News" 
+                class="w-full bg-slate-950 border border-slate-800 focus:border-sky-500 rounded-xl px-3.5 py-2.5 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20 transition-all"
+              />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1.5">Language</label>
+              <input 
+                type="text" 
+                id="manualLanguage" 
+                placeholder="e.g. Bangla, Hindi, English" 
+                class="w-full bg-slate-950 border border-slate-800 focus:border-sky-500 rounded-xl px-3.5 py-2.5 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20 transition-all"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1.5">Logo Image URL</label>
+            <input 
+              type="url" 
+              id="manualLogoUrl" 
+              placeholder="https://example.com/logo.png" 
+              class="w-full bg-slate-950 border border-slate-800 focus:border-sky-500 rounded-xl px-3.5 py-2.5 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20 transition-all"
+            />
+          </div>
+
+          <div id="manualErrorMsg" class="hidden text-xs text-rose-400 bg-rose-500/10 border border-rose-500/20 rounded-xl p-3"></div>
+
+          <div class="pt-2 flex justify-end gap-3">
+            <button type="button" onclick="closeAddChannelModal()" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold transition-all">
+              Cancel
+            </button>
+            <button type="submit" id="manualSubmitBtn" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-sky-500 to-cyan-500 hover:from-sky-400 hover:to-cyan-400 text-slate-950 font-bold text-xs flex items-center gap-2 shadow-lg shadow-sky-500/25 transition-all">
+              Save to Database
+            </button>
+          </div>
+
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- VIDEO PLAYER MODAL -->
+  <div id="playerModal" class="fixed inset-0 z-50 hidden items-center justify-center p-2.5 sm:p-4 bg-slate-950/85 backdrop-blur-md">
+    <div class="relative w-full max-w-4xl bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[92dvh] sm:max-h-[90vh]">
+      
+      <!-- Modal Header -->
+      <div class="px-3.5 py-3 sm:px-5 sm:py-3.5 border-b border-slate-800/80 flex items-center justify-between bg-slate-950">
+        <div class="flex items-center gap-2 min-w-0">
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse flex-shrink-0"></span>
+          <h3 id="playerModalTitle" class="text-sm sm:text-base font-bold text-white truncate">Live Stream</h3>
+        </div>
+        <button onclick="closePlayerModal()" class="w-8 h-8 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 flex items-center justify-center transition-colors">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <!-- Player Frame -->
+      <div class="relative w-full bg-black aspect-video flex items-center justify-center">
+        <video id="videoPlayer" class="w-full h-full object-contain" controls autoplay playsinline></video>
+        
+        <!-- Stream Error Overlay -->
+        <div id="playerErrorOverlay" class="hidden absolute inset-0 bg-slate-950/90 flex flex-col items-center justify-center p-6 text-center">
+          <div class="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center mb-3">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+          </div>
+          <p class="text-sm font-bold text-white">Browser Playback Blocked or Offline</p>
+          <p class="text-xs text-slate-400 max-w-md mt-1 mb-4">This stream may have restrictive CORS headers or token expired. Copy the URL to stream in VLC or OTT Navigator.</p>
+          <button onclick="copyCurrentStreamUrl()" class="px-4 py-2 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 text-xs font-bold transition-all">
+            Copy Stream URL
+          </button>
+        </div>
+      </div>
+
+      <!-- Footer Info -->
+      <div class="px-3.5 py-2.5 sm:px-5 sm:py-3 bg-slate-950 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400 gap-2">
+        <div id="playerStreamUrl" class="font-mono truncate max-w-xs sm:max-w-md select-all text-slate-400 text-[11px] sm:text-xs"></div>
+        <button onclick="copyCurrentStreamUrl()" class="flex-shrink-0 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold transition-all">
+          Copy Link
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed bottom-4 right-4 sm:bottom-5 sm:right-5 left-4 sm:left-auto max-w-sm z-50 hidden items-center gap-2 px-4 py-3 rounded-xl bg-slate-900 border border-sky-500/50 text-white text-xs font-semibold shadow-2xl shadow-black">
+    <svg class="w-4 h-4 text-sky-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+    <span id="toastText">Action completed</span>
+  </div>
+
+  <!-- ========================================================== -->
+  <!-- JAVASCRIPT LOGIC -->
+  <!-- ========================================================== -->
+  <script>
+    const GET_CHANNELS_URL = "https://d1-template.mdseyamkhanoffice.workers.dev/getChannels";
+    const GET_SOURCES_URL = "https://d1-template.mdseyamkhanoffice.workers.dev/getPlaylistSources";
+    const ADD_CHANNEL_URL = "https://d1-template.mdseyamkhanoffice.workers.dev/addChannel";
+
+    let channelsList = [];
+    let playlistSources = [];
+    let sourcesLoaded = false;
+    let hls = null;
+    let currentStreamUrl = "";
+
+    // Main DOM Elements
+    const channelsGrid = document.getElementById('channelsGrid');
+    const loadingState = document.getElementById('loadingState');
+    const errorState = document.getElementById('errorState');
+    const emptyState = document.getElementById('emptyState');
+    const searchInput = document.getElementById('searchInput');
+    const clearSearchBtn = document.getElementById('clearSearchBtn');
+    const categorySelect = document.getElementById('categorySelect');
+    const totalBadge = document.getElementById('totalBadge');
+    const filteredCount = document.getElementById('filteredCount');
+    const refreshIcon = document.getElementById('refreshIcon');
+
+    // Add Channel Modal Elements
+    const addChannelModal = document.getElementById('addChannelModal');
+    const sourcesCountBadge = document.getElementById('sourcesCountBadge');
+    const sourceSearchInput = document.getElementById('sourceSearchInput');
+    const sourceSearchBtn = document.getElementById('sourceSearchBtn');
+    const searchBtnIcon = document.getElementById('searchBtnIcon');
+    const searchBtnSpinner = document.getElementById('searchBtnSpinner');
+    const sourceSearchStatus = document.getElementById('sourceSearchStatus');
+    const sourceSearchStatusText = document.getElementById('sourceSearchStatusText');
+    const sourceSearchProgressBadge = document.getElementById('sourceSearchProgressBadge');
+    const sourceResultsList = document.getElementById('sourceResultsList');
+
+    // Player Elements
+    const playerModal = document.getElementById('playerModal');
+    const videoPlayer = document.getElementById('videoPlayer');
+    const playerModalTitle = document.getElementById('playerModalTitle');
+    const playerStreamUrl = document.getElementById('playerStreamUrl');
+    const playerErrorOverlay = document.getElementById('playerErrorOverlay');
+    const toast = document.getElementById('toast');
+    const toastText = document.getElementById('toastText');
+
+    // ==========================================================
+    // 1. M3U PARSER
+    // ==========================================================
+    function parseM3U(content, sourceName = '') {
+      const lines = content.split(/\r?\n/);
+      const items = [];
+      let currentGroup = 'General';
+      let currentItem = null;
+
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i].trim();
+        if (!line) continue;
+
+        if (line.startsWith('#EXTGRP:')) {
+          currentGroup = line.slice(8).trim() || 'General';
+        } else if (line.startsWith('#EXTINF:')) {
+          const logoMatch = line.match(/tvg-logo="([^"]*)"/i);
+          const groupMatch = line.match(/group-title="([^"]*)"/i);
+          const langMatch = line.match(/tvg-language="([^"]*)"/i);
+          const commaIdx = line.lastIndexOf(',');
+
+          const logo = logoMatch ? logoMatch[1].trim() : '';
+          const group = (groupMatch && groupMatch[1].trim()) ? groupMatch[1].trim() : currentGroup;
+          const language = langMatch ? langMatch[1].trim() : null;
+          const name = commaIdx !== -1 ? line.slice(commaIdx + 1).trim() : 'Unknown Channel';
+
+          currentItem = {
+            id: items.length + 1,
+            name: name,
+            logo: logo,
+            group: group,
+            language: language,
+            sourceName: sourceName,
+            url: ''
+          };
+        } else if (!line.startsWith('#')) {
+          if (currentItem) {
+            currentItem.url = line;
+            items.push(currentItem);
+            currentItem = null;
+          }
+        }
+      }
+      return items;
+    }
+
+    // ==========================================================
+    // 2. FETCH MAIN D1 CHANNELS
+    // ==========================================================
+    async function loadChannels() {
+      loadingState.classList.remove('hidden');
+      errorState.classList.add('hidden');
+      emptyState.classList.add('hidden');
+      channelsGrid.classList.add('hidden');
+      refreshIcon.classList.add('animate-spin');
+
+      try {
+        const res = await fetch(GET_CHANNELS_URL);
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const data = await res.text();
+        
+        channelsList = parseM3U(data);
+        totalBadge.textContent = channelsList.length;
+
+        populateCategoryOptions();
+        renderChannelGrid();
+
+        loadingState.classList.add('hidden');
+        channelsGrid.classList.remove('hidden');
+      } catch (err) {
+        console.error('Fetch error:', err);
+        loadingState.classList.add('hidden');
+        errorState.classList.remove('hidden');
+      } finally {
+        refreshIcon.classList.remove('animate-spin');
+      }
+    }
+
+    function populateCategoryOptions() {
+      const categories = new Set();
+      channelsList.forEach(c => {
+        if (c.group) categories.add(c.group);
+      });
+
+      const sorted = Array.from(categories).sort();
+      const previousValue = categorySelect.value;
+      categorySelect.innerHTML = `<option value="ALL">All Categories (${channelsList.length})</option>`;
+
+      sorted.forEach(cat => {
+        const count = channelsList.filter(c => c.group === cat).length;
+        const opt = document.createElement('option');
+        opt.value = cat;
+        opt.textContent = `${cat} (${count})`;
+        categorySelect.appendChild(opt);
+      });
+
+      if (sorted.includes(previousValue)) {
+        categorySelect.value = previousValue;
+      }
+
+      // Populate datalist for selecting group name anywhere
+      const allGroupDatalist = document.getElementById('allGroupDatalist');
+      if (allGroupDatalist) {
+        allGroupDatalist.innerHTML = sorted.map(cat => `<option value="${escapeHtml(cat)}">${escapeHtml(cat)}</option>`).join('');
+      }
+    }
+
+    function renderChannelGrid() {
+      const query = searchInput.value.toLowerCase().trim();
+      const selectedCategory = categorySelect.value;
+
+      const filtered = channelsList.filter(channel => {
+        const matchesQuery = !query ||
+          channel.name.toLowerCase().includes(query) ||
+          channel.group.toLowerCase().includes(query);
+
+        const matchesCat = (selectedCategory === 'ALL') || (channel.group === selectedCategory);
+        return matchesQuery && matchesCat;
+      });
+
+      filteredCount.textContent = filtered.length;
+
+      if (filtered.length === 0) {
+        channelsGrid.classList.add('hidden');
+        emptyState.classList.remove('hidden');
+        return;
+      }
+
+      emptyState.classList.add('hidden');
+      channelsGrid.classList.remove('hidden');
+
+      channelsGrid.innerHTML = filtered.map(ch => {
+        const initial = (ch.name.charAt(0) || 'T').toUpperCase();
+        const logoContent = ch.logo
+          ? `<img src="${escapeHtml(ch.logo)}" alt="${escapeHtml(ch.name)}" class="w-full h-full object-contain" onerror="this.classList.add('hidden'); this.nextElementSibling.classList.remove('hidden');" loading="lazy">
+             <div class="hidden font-bold text-sky-400 text-lg">${escapeHtml(initial)}</div>`
+          : `<div class="font-bold text-sky-400 text-lg">${escapeHtml(initial)}</div>`;
+
+        return `
+          <div class="group bg-slate-900/90 hover:bg-slate-800/90 border border-slate-800 hover:border-sky-500/60 rounded-xl p-2.5 sm:p-4 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-2.5 sm:gap-4 transition-all duration-200 hover:shadow-xl hover:shadow-sky-500/5 hover:-translate-y-0.5">
+            <div class="flex items-center gap-2.5 sm:gap-3.5 min-w-0 flex-1">
+              <div class="w-10 h-10 sm:w-14 sm:h-14 rounded-lg sm:rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-center p-1 sm:p-1.5 flex-shrink-0 overflow-hidden shadow-inner">
+                ${logoContent}
+              </div>
+
+              <div class="flex-1 min-w-0">
+                <h4 class="text-xs sm:text-sm font-bold text-white truncate group-hover:text-sky-300 transition-colors" title="${escapeHtml(ch.name)}">
+                  ${escapeHtml(ch.name)}
+                </h4>
+                
+                <div class="mt-0.5 sm:mt-1">
+                  <span class="inline-block px-1.5 sm:px-2 py-0.5 rounded-md bg-sky-500/10 border border-sky-500/20 text-sky-400 font-semibold text-[9px] sm:text-[11px] truncate max-w-full" title="${escapeHtml(ch.group)}">
+                    ${escapeHtml(ch.group)}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-1.5 sm:gap-2 flex-shrink-0 pt-2 md:pt-0 border-t border-slate-800/60 md:border-0">
+              <button 
+                onclick="playStream('${escapeHtml(ch.name)}', '${encodeURIComponent(ch.url)}')"
+                class="flex-1 md:flex-initial justify-center px-2.5 sm:px-3 py-1.5 rounded-lg bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold text-[11px] sm:text-xs flex items-center gap-1.5 shadow-sm shadow-sky-500/20 transition-all hover:scale-105 active:scale-95"
+              >
+                <svg class="w-3 h-3 fill-current flex-shrink-0" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                Play
+              </button>
+              <button 
+                onclick="copyUrl('${encodeURIComponent(ch.url)}')"
+                class="flex-1 md:flex-initial justify-center px-2 sm:px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-medium text-[11px] sm:text-xs flex items-center gap-1 border border-slate-700/60 transition-all active:scale-95"
+                title="Copy Stream Link"
+              >
+                <svg class="w-3 h-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                Copy
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // ==========================================================
+    // 3. FETCH PLAYLIST SOURCES & MULTI-SOURCE SEARCH
+    // ==========================================================
+    async function loadPlaylistSources() {
+      try {
+        sourcesCountBadge.textContent = "fetching sources...";
+        const res = await fetch(GET_SOURCES_URL);
+        const data = await res.json();
+        if (data.success && Array.isArray(data.sources)) {
+          playlistSources = data.sources.filter(s => s.enabled === 1);
+          sourcesLoaded = true;
+          sourcesCountBadge.textContent = `${playlistSources.length} sources loaded`;
+        } else {
+          sourcesCountBadge.textContent = `0 sources available`;
+        }
+      } catch (err) {
+        console.error("Error fetching sources:", err);
+        sourcesCountBadge.textContent = `error loading sources`;
+      }
+    }
+
+    function openAddChannelModal() {
+      addChannelModal.classList.remove('hidden');
+      addChannelModal.classList.add('flex');
+      switchAddTab('sources');
+      
+      // Fetch fresh sources whenever modal opens
+      loadPlaylistSources();
+
+      setTimeout(() => sourceSearchInput.focus(), 150);
+    }
+
+    function closeAddChannelModal() {
+      addChannelModal.classList.add('hidden');
+      addChannelModal.classList.remove('flex');
+    }
+
+    function switchAddTab(tab) {
+      const tabSourcesBtn = document.getElementById('tabSourcesBtn');
+      const tabManualBtn = document.getElementById('tabManualBtn');
+      const tabSourcesContent = document.getElementById('tabSourcesContent');
+      const tabManualContent = document.getElementById('tabManualContent');
+
+      if (tab === 'sources') {
+        tabSourcesBtn.className = "px-3.5 py-2 text-xs font-bold border-b-2 border-sky-400 text-sky-400 flex items-center gap-1.5 transition-colors";
+        tabManualBtn.className = "px-3.5 py-2 text-xs font-semibold border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center gap-1.5 transition-colors";
+        tabSourcesContent.classList.remove('hidden');
+        tabManualContent.classList.add('hidden');
+      } else {
+        tabManualBtn.className = "px-3.5 py-2 text-xs font-bold border-b-2 border-sky-400 text-sky-400 flex items-center gap-1.5 transition-colors";
+        tabSourcesBtn.className = "px-3.5 py-2 text-xs font-semibold border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center gap-1.5 transition-colors";
+        tabSourcesContent.classList.add('hidden');
+        tabManualContent.classList.remove('hidden');
+      }
+    }
+
+    function handleSourceSearchKey(e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        executeSourceSearch();
+      }
+    }
+
+    // Search across all sources
+    async function executeSourceSearch() {
+      const query = sourceSearchInput.value.trim().toLowerCase();
+      if (!query) return;
+
+      if (!sourcesLoaded || playlistSources.length === 0) {
+        await loadPlaylistSources();
+      }
+
+      // UI Searching State
+      searchBtnIcon.classList.add('hidden');
+      searchBtnSpinner.classList.remove('hidden');
+      sourceSearchBtn.disabled = true;
+      sourceSearchStatus.classList.remove('hidden');
+      const batchGroupBar = document.getElementById('batchGroupBar');
+      if (batchGroupBar) batchGroupBar.classList.add('hidden');
+      sourceResultsList.innerHTML = '';
+
+      let matchingChannels = [];
+      let completedCount = 0;
+      const totalSources = playlistSources.length;
+
+      sourceSearchStatusText.textContent = `Searching ${totalSources} playlist sources for "${query}"...`;
+      sourceSearchProgressBadge.textContent = `0%`;
+
+      // Helper to fetch playlist with timeout and CORS fallback
+      async function fetchPlaylistText(source) {
+        try {
+          const controller = new AbortController();
+          const timer = setTimeout(() => controller.abort(), 9000);
+          
+          let res;
+          try {
+            res = await fetch(source.url, { signal: controller.signal });
+          } catch (e) {
+            // If direct fetch fails (e.g. CORS), fallback to public CORS gateway
+            const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(source.url)}`;
+            res = await fetch(proxyUrl, { signal: controller.signal });
+          }
+
+          clearTimeout(timer);
+          if (!res.ok) return '';
+          return await res.text();
+        } catch (e) {
+          console.warn(`Could not fetch source "${source.name}":`, e);
+          return '';
+        }
+      }
+
+      // Concurrently query sources in batches of 4
+      const batchSize = 4;
+      for (let i = 0; i < playlistSources.length; i += batchSize) {
+        const batch = playlistSources.slice(i, i + batchSize);
+        await Promise.all(batch.map(async (source) => {
+          const text = await fetchPlaylistText(source);
+          if (text) {
+            const parsed = parseM3U(text, source.name);
+            const found = parsed.filter(ch => ch.name.toLowerCase().includes(query));
+            matchingChannels.push(...found);
+          }
+          completedCount++;
+          const percent = Math.round((completedCount / totalSources) * 100);
+          sourceSearchStatusText.textContent = `Scanned ${completedCount}/${totalSources} sources (Found ${matchingChannels.length} matches)...`;
+          sourceSearchProgressBadge.textContent = `${percent}%`;
+        }));
+      }
+
+      // Search finished
+      searchBtnIcon.classList.remove('hidden');
+      searchBtnSpinner.classList.add('hidden');
+      sourceSearchBtn.disabled = false;
+      sourceSearchStatusText.textContent = `Search complete! Found ${matchingChannels.length} results.`;
+      sourceSearchProgressBadge.textContent = `100%`;
+
+      if (matchingChannels.length === 0) {
+        if (batchGroupBar) batchGroupBar.classList.add('hidden');
+        sourceResultsList.innerHTML = `
+          <div class="py-12 text-center text-slate-500 text-xs">
+            <p class="text-base font-bold text-slate-300">No channels found for "${escapeHtml(query)}"</p>
+            <p class="mt-1">Try another keyword or add the channel manually with direct URL.</p>
+          </div>
+        `;
+        return;
+      }
+
+      // Show batch group bar when results exist
+      if (batchGroupBar) batchGroupBar.classList.remove('hidden');
+
+      // Render search results with Live Probe placeholders & editable Group Selector
+      sourceResultsList.innerHTML = matchingChannels.map((item, idx) => {
+        const rowId = `probe-row-${idx}`;
+        const initial = (item.name.charAt(0) || 'C').toUpperCase();
+        const logo = item.logo ? `<img src="${escapeHtml(item.logo)}" class="w-full h-full object-contain" onerror="this.remove()">` : '';
+
+        return `
+          <div id="${rowId}" class="bg-slate-950/80 border border-slate-800/90 hover:border-slate-700 rounded-xl p-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition-all">
+            
+            <!-- Left Info -->
+            <div class="flex items-center gap-3 min-w-0 flex-1">
+              <div class="w-10 h-10 rounded-lg bg-slate-900 border border-slate-800 flex items-center justify-center p-1 flex-shrink-0 overflow-hidden font-bold text-sky-400 text-sm">
+                ${logo || initial}
+              </div>
+              <div class="min-w-0 flex-1">
+                <div class="flex items-center gap-2">
+                  <h4 class="text-xs sm:text-sm font-bold text-white truncate" title="${escapeHtml(item.name)}">${escapeHtml(item.name)}</h4>
+                  <span class="px-1.5 py-0.5 rounded text-[10px] bg-slate-800 text-slate-400 font-medium truncate max-w-[120px]">${escapeHtml(item.sourceName || 'Source')}</span>
+                </div>
+                
+                <!-- Group Selection Box & Stream Link -->
+                <div class="flex flex-wrap items-center gap-2 mt-1.5 text-[11px] text-slate-500">
+                  <div class="flex items-center gap-1 bg-slate-900 border border-slate-700/80 hover:border-sky-500 rounded-lg px-2 py-0.5 transition-colors" title="Select or type custom group">
+                    <span class="text-[9px] uppercase font-bold text-slate-400">Group:</span>
+                    <input 
+                      type="text" 
+                      list="allGroupDatalist" 
+                      id="${rowId}-group" 
+                      value="${escapeHtml(item.group || 'General')}" 
+                      placeholder="Group name"
+                      class="bg-transparent text-sky-400 font-bold text-[11px] border-0 outline-none w-28 sm:w-36 focus:text-sky-300 hover:text-sky-300 cursor-pointer"
+                    />
+                  </div>
+                  <span class="hidden sm:inline text-slate-600">•</span>
+                  <span class="font-mono text-slate-400 truncate max-w-[170px] sm:max-w-xs text-[10px]" title="${escapeHtml(item.url)}">${escapeHtml(item.url)}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Probe & Add to Database Actions -->
+            <div class="flex flex-wrap sm:flex-nowrap items-center justify-between sm:justify-end gap-2 w-full sm:w-auto pt-2 sm:pt-0 border-t border-slate-800/60 sm:border-0 flex-shrink-0">
+              
+              <!-- Live Probe Status Badge -->
+              <div id="${rowId}-status" class="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 text-[11px] font-semibold text-amber-400 flex items-center gap-1.5 flex-shrink-0">
+                <span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+                <span>Probing...</span>
+              </div>
+
+              <!-- Action Buttons -->
+              <div class="flex items-center gap-2">
+                <!-- Test Play Button -->
+                <button 
+                  onclick="playStream('${escapeHtml(item.name)}', '${encodeURIComponent(item.url)}')"
+                  class="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold transition-all active:scale-95"
+                  title="Preview Stream"
+                >
+                  Preview
+                </button>
+
+                <!-- Add to Database Button -->
+                <button 
+                  id="${rowId}-addbtn"
+                  onclick="saveDiscoveredChannel(${idx}, '${rowId}')"
+                  class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-emerald-600 text-slate-300 hover:text-white font-bold text-xs flex items-center gap-1.5 transition-all shadow-sm active:scale-95"
+                >
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
+                  <span>Add to DB</span>
+                </button>
+              </div>
+
+            </div>
+
+          </div>
+        `;
+      }).join('');
+
+      // Store in memory for save handlers
+      window._currentSearchResults = matchingChannels;
+
+      // Start probing streams in parallel
+      probeAllSearchResults(matchingChannels);
+    }
+
+    // ==========================================================
+    // 4. LIVE STREAM HEALTH PROBE
+    // ==========================================================
+    async function probeStreamHealth(streamUrl) {
+      return new Promise((resolve) => {
+        let isDone = false;
+        const done = (live, reason) => {
+          if (!isDone) {
+            isDone = true;
+            resolve({ live, reason });
+          }
+        };
+
+        // Timeout limit: 5.5s
+        const timeout = setTimeout(() => {
+          done(false, 'Timeout');
+        }, 5500);
+
+        // 1. Direct fetch attempt
+        fetch(streamUrl, { method: 'GET', mode: 'cors' })
+          .then(res => {
+            clearTimeout(timeout);
+            if (res.ok) {
+              done(true, 'HTTP OK');
+            } else {
+              done(false, `HTTP ${res.status}`);
+            }
+          })
+          .catch(() => {
+            // 2. Fetch failed (possibly CORS or blocked), test with Hls.js
+            if (Hls.isSupported()) {
+              const probeHls = new Hls({ maxBufferLength: 1, maxMaxBufferLength: 1 });
+              const hlsTimer = setTimeout(() => {
+                probeHls.destroy();
+                clearTimeout(timeout);
+                done(false, 'HLS Timeout');
+              }, 4500);
+
+              probeHls.loadSource(streamUrl);
+              probeHls.on(Hls.Events.MANIFEST_PARSED, () => {
+                clearTimeout(hlsTimer);
+                clearTimeout(timeout);
+                probeHls.destroy();
+                done(true, 'Manifest Live');
+              });
+              probeHls.on(Hls.Events.ERROR, (e, data) => {
+                if (data.fatal) {
+                  clearTimeout(hlsTimer);
+                  clearTimeout(timeout);
+                  probeHls.destroy();
+                  done(false, data.details || 'HLS Error');
+                }
+              });
+            } else {
+              clearTimeout(timeout);
+              done(false, 'Offline');
+            }
+          });
+      });
+    }
+
+    async function probeAllSearchResults(items) {
+      // Process probes concurrently in batches of 4
+      const pool = 4;
+      for (let i = 0; i < items.length; i += pool) {
+        const slice = items.slice(i, i + pool);
+        await Promise.all(slice.map(async (item, subIdx) => {
+          const index = i + subIdx;
+          const rowId = `probe-row-${index}`;
+          const statusEl = document.getElementById(`${rowId}-status`);
+          const addBtn = document.getElementById(`${rowId}-addbtn`);
+          if (!statusEl) return;
+
+          const probe = await probeStreamHealth(item.url);
+          item.isLive = probe.live;
+
+          if (probe.live) {
+            statusEl.className = "px-2.5 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-[11px] font-bold text-emerald-400 flex items-center gap-1.5";
+            statusEl.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-500"></span><span>LIVE</span>`;
+            if (addBtn && !addBtn.dataset.added) {
+              addBtn.className = "px-3 py-1 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs flex items-center gap-1.5 transition-all shadow-md shadow-emerald-500/20";
+            }
+          } else {
+            statusEl.className = "px-2.5 py-1 rounded-lg bg-rose-500/10 border border-rose-500/20 text-[11px] font-semibold text-rose-400 flex items-center gap-1.5";
+            statusEl.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-rose-400"></span><span>Offline</span>`;
+          }
+        }));
+      }
+    }
+
+    // Helper to apply batch group to all discovered items
+    function applyBatchGroupToAll() {
+      const batchInput = document.getElementById('batchGroupInput');
+      const val = batchInput ? batchInput.value.trim() : '';
+      if (!val) {
+        showToast("Please enter or select a group name first");
+        return;
+      }
+      const groupInputs = document.querySelectorAll('[id$="-group"]');
+      groupInputs.forEach(input => {
+        input.value = val;
+      });
+      showToast(`Assigned group "${val}" to all channels`);
+    }
+
+    // ==========================================================
+    // 5. ADD CHANNEL TO DATABASE (POST /addChannel)
+    // ==========================================================
+    async function saveDiscoveredChannel(index, rowId) {
+      const channel = window._currentSearchResults ? window._currentSearchResults[index] : null;
+      if (!channel) return;
+
+      const groupInput = document.getElementById(`${rowId}-group`);
+      const selectedGroup = groupInput && groupInput.value.trim() ? groupInput.value.trim() : (channel.group || 'General');
+
+      const addBtn = document.getElementById(`${rowId}-addbtn`);
+      if (addBtn) {
+        addBtn.disabled = true;
+        addBtn.innerHTML = `<span class="w-3.5 h-3.5 border-2 border-current border-t-transparent rounded-full animate-spin"></span><span>Saving...</span>`;
+      }
+
+      const payload = {
+        title: channel.name,
+        group_title: selectedGroup,
+        tvg_logo: channel.logo || '',
+        stream_url: channel.url,
+        language: channel.language || null
+      };
+
+      try {
+        const res = await fetch(ADD_CHANNEL_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+          // Add to local channels list immediately
+          channelsList.unshift({
+            id: channelsList.length + 1,
+            name: payload.title,
+            logo: payload.tvg_logo,
+            group: payload.group_title,
+            language: payload.language,
+            url: payload.stream_url
+          });
+
+          totalBadge.textContent = channelsList.length;
+          populateCategoryOptions();
+          renderChannelGrid();
+
+          if (addBtn) {
+            addBtn.dataset.added = "true";
+            addBtn.className = "px-3 py-1 rounded-lg bg-emerald-600/30 border border-emerald-500/40 text-emerald-400 font-bold text-xs flex items-center gap-1 cursor-default";
+            addBtn.innerHTML = `<span>✓ Added</span>`;
+          }
+
+          showToast(`Added "${payload.title}" to database!`);
+        } else {
+          throw new Error(data.message || data.error || 'Server rejected');
+        }
+      } catch (err) {
+        console.error('Error saving channel:', err);
+        showToast(`Failed: ${err.message}`);
+        if (addBtn) {
+          addBtn.disabled = false;
+          addBtn.innerHTML = `<span>Retry Add</span>`;
+        }
+      }
+    }
+
+    // Manual Add Form Submission
+    async function handleManualAdd(e) {
+      e.preventDefault();
+      const manualErrorMsg = document.getElementById('manualErrorMsg');
+      const manualSubmitBtn = document.getElementById('manualSubmitBtn');
+      manualErrorMsg.classList.add('hidden');
+
+      const title = document.getElementById('manualTitle').value.trim();
+      const stream_url = document.getElementById('manualStreamUrl').value.trim();
+      const group_title = document.getElementById('manualGroup').value.trim() || 'General';
+      const language = document.getElementById('manualLanguage').value.trim() || null;
+      const tvg_logo = document.getElementById('manualLogoUrl').value.trim();
+
+      if (!title || !stream_url) {
+        manualErrorMsg.textContent = "Title and Stream URL are required fields.";
+        manualErrorMsg.classList.remove('hidden');
+        return;
+      }
+
+      manualSubmitBtn.disabled = true;
+      manualSubmitBtn.innerHTML = `Saving...`;
+
+      try {
+        const payload = { title, group_title, tvg_logo, stream_url, language };
+        const res = await fetch(ADD_CHANNEL_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+        if (data.success) {
+          channelsList.unshift({
+            id: channelsList.length + 1,
+            name: title,
+            logo: tvg_logo,
+            group: group_title,
+            language: language,
+            url: stream_url
+          });
+
+          totalBadge.textContent = channelsList.length;
+          populateCategoryOptions();
+          renderChannelGrid();
+
+          closeAddChannelModal();
+          showToast(`Channel "${title}" saved to database!`);
+        } else {
+          throw new Error(data.message || data.error || 'Failed to save');
+        }
+      } catch (err) {
+        manualErrorMsg.textContent = err.message;
+        manualErrorMsg.classList.remove('hidden');
+      } finally {
+        manualSubmitBtn.disabled = false;
+        manualSubmitBtn.innerHTML = `Save to Database`;
+      }
+    }
+
+    // ==========================================================
+    // 6. VIDEO PLAYER MODAL & HLS PLAYBACK
+    // ==========================================================
+    function playStream(name, encodedUrl) {
+      const url = decodeURIComponent(encodedUrl);
+      currentStreamUrl = url;
+      playerModalTitle.textContent = name;
+      playerStreamUrl.textContent = url;
+      playerErrorOverlay.classList.add('hidden');
+
+      playerModal.classList.remove('hidden');
+      playerModal.classList.add('flex');
+
+      if (hls) {
+        hls.destroy();
+        hls = null;
+      }
+
+      if (Hls.isSupported()) {
+        hls = new Hls({
+          enableWorker: true,
+          lowLatencyMode: true
+        });
+        hls.loadSource(url);
+        hls.attachMedia(videoPlayer);
+        hls.on(Hls.Events.MANIFEST_PARSED, () => {
+          videoPlayer.play().catch(e => console.log('Autoplay prevented:', e));
+        });
+        hls.on(Hls.Events.ERROR, (event, data) => {
+          if (data.fatal) {
+            console.warn('Fatal HLS playback error:', data);
+            playerErrorOverlay.classList.remove('hidden');
+          }
+        });
+      } else if (videoPlayer.canPlayType('application/vnd.apple.mpegurl')) {
+        videoPlayer.src = url;
+        videoPlayer.play().catch(e => {
+          console.warn('Playback error:', e);
+          playerErrorOverlay.classList.remove('hidden');
+        });
+      } else {
+        playerErrorOverlay.classList.remove('hidden');
+      }
+    }
+
+    function closePlayerModal() {
+      playerModal.classList.add('hidden');
+      playerModal.classList.remove('flex');
+      if (hls) {
+        hls.destroy();
+        hls = null;
+      }
+      videoPlayer.pause();
+      videoPlayer.src = '';
+    }
+
+    function copyCurrentStreamUrl() {
+      if (currentStreamUrl) {
+        copyUrl(encodeURIComponent(currentStreamUrl));
+      }
+    }
+
+    function copyUrl(encodedUrl) {
+      const url = decodeURIComponent(encodedUrl);
+      navigator.clipboard.writeText(url).then(() => {
+        showToast('Stream URL copied to clipboard!');
+      }).catch(() => {
+        showToast('Failed to copy URL');
+      });
+    }
+
+    function showToast(msg) {
+      toastText.textContent = msg;
+      toast.classList.remove('hidden');
+      toast.classList.add('flex');
+      clearTimeout(window._toastTimeout);
+      window._toastTimeout = setTimeout(() => {
+        toast.classList.add('hidden');
+        toast.classList.remove('flex');
+      }, 2500);
+    }
+
+    function clearSearch() {
+      searchInput.value = '';
+      clearSearchBtn.classList.add('hidden');
+      renderChannelGrid();
+      searchInput.focus();
+    }
+
+    function escapeHtml(text) {
+      if (!text) return '';
+      return text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    // Main page search listeners
+    searchInput.addEventListener('input', () => {
+      clearSearchBtn.classList.toggle('hidden', !searchInput.value);
+      renderChannelGrid();
+    });
+    categorySelect.addEventListener('change', renderChannelGrid);
+
+    // Global Key Handlers
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeAddChannelModal();
+        closePlayerModal();
+      }
+    });
+
+    // Close on backdrop click
+    addChannelModal.addEventListener('click', (e) => {
+      if (e.target === addChannelModal) closeAddChannelModal();
+    });
+    playerModal.addEventListener('click', (e) => {
+      if (e.target === playerModal) closePlayerModal();
+    });
+
+    // Initial Load
+    loadChannels();
+  </script>
+</body>
+</html>
